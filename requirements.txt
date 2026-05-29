@@ -3,3 +3,4 @@ socket.io
 dotenv
 cookie-parser
 cors
+mongoose
