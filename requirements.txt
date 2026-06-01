@@ -4,3 +4,8 @@ dotenv
 cookie-parser
 cors
 mongoose
+
+
+
+
+tailwindcss @tailwindcss/vite
