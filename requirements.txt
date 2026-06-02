@@ -9,3 +9,6 @@ mongoose
 
 
 tailwindcss @tailwindcss/vite
+framer-motion
+react-responsive
+react-router-dom
