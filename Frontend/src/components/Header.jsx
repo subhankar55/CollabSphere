@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink,Link } from "react-router-dom";
 
 
 function Header(){
@@ -59,9 +59,12 @@ function Header(){
                             Pricing
                         </NavLink>
                         </div>
-                        <button className="text-white absolute right-[1em] top-[0.4em]">
+                        <Link 
+                         to="/login"
+                         className="text-white absolute right-[1em] top-[0.4em]"
+                        >
                             Login
-                        </button>
+                        </Link>
                     </nav>
                 </div>
             </header>
