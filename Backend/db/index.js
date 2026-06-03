@@ -11,7 +11,7 @@ export async function connectDB() {
       await mongoose.connect(`mongodb://127.0.0.1:27017/${process.env.DB_NAME}`,{
             serverSelectionTimeoutMS: 5000 
         });
-      console.log("Connected to MongoDB");
+      console.log("Connected to MongoDB!");
   }
   catch(error){
     console.log(error);
