@@ -61,7 +61,7 @@ function Header(){
                         </div>
                         <Link 
                          to="/login"
-                         className="text-white absolute right-[1em] top-[0.4em]"
+                         className="text-white absolute right-[1em] top-[0.4em] hover:text-cyan-400"
                         >
                             Login
                         </Link>

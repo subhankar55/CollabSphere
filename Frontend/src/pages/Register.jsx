@@ -7,7 +7,7 @@ function Register(){
 
     return(
         <>
-            <div className="bg-black min-h-screen w-full p-[2em]">
+            <div className="bg-black min-h-screen w-full px-[2em] py-[5em]">
 
                 <div className="h-[75vh] w-full md:w-[50%] bg-cyan-900 mx-auto rounded-3xl border-[0.01em] border-cyan-400 shadow-[0_0_20px_rgba(103,232,249,0.8)] p-[1em] overflow-auto">
                     <form 
