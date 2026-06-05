@@ -15,3 +15,5 @@ tailwindcss @tailwindcss/vite
 framer-motion
 react-responsive
 react-router-dom
+axios
+react-icons
