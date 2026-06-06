@@ -3,6 +3,8 @@ import User from "../../models/user.model.js";
 import ApiError from "../../utils/ApiError.utils.js";
 import ApiResponse from "../../utils/ApiResponse.utils.js";
 import asyncHandler from "../../utils/asyncHandler.utils.js";
+import jwt from "jsonwebtoken";
+
 
 
 
@@ -185,7 +187,7 @@ const updatePassword = asyncHandler(
         return res
         .status(200)
         .json(
-            new ApiResponse(200,null,"Password updated successfully!")
+            new ApiResponse(200,user,"Password updated successfully!")
         );
 
 
@@ -195,6 +197,25 @@ const updatePassword = asyncHandler(
 const deleteUser = asyncHandler(
     async function(req,res){
         // Delete a logged in user
+        // get userid from req.user 
+        // validate the userid
+        // delete the user by id
+        // return response
+
+        const userid = req.user?._id;
+
+        if(!userid || !isValidObjectId(userid)){
+            throw new ApiError(400,"Invalid user!");
+        }
+
+        await User.deleteOne({_id:userid});
+
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(200,null,"User deleted successfully!")
+        );
+
 
     }
 );
@@ -202,6 +223,49 @@ const deleteUser = asyncHandler(
 const refreshAccessToken = asyncHandler(
     async function(req,res){
         // Refresh access Token of a logged_in User
+        // get refreshToken from req.cookie
+        // decode the refreshToken using secret
+        // validate the decoded token
+        // get userid from this decoded refreshToken
+        // check if the refreshToken stored in the db is same as the incoming refreshToken
+        // generate an accessToken for that user
+        // set cookies
+        // return response
+        
+        const incomingRefreshToken = req.cookies?.refreshToken || req.header("refreshToken");
+
+
+        if(!incomingRefreshToken){
+            throw new ApiError(401,"Unauthorized request!");
+        }
+        const decodedtoken = jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRET);
+        if(!decodedtoken){
+            throw new ApiError(401,"Unauthorized request!");
+
+        }
+        const userid = decodedtoken?._id;
+
+        const user = await User.findById(userid);
+
+        if(!user){
+            throw new ApiError(404,"User not found!");
+        }
+
+        if(incomingRefreshToken !== user.refresh_token){
+            throw new ApiError(401,"Unauthorized request!");
+        }
+
+        const accessToken = user.generateAccesstoken();
+
+        return res
+        .status(200)
+        .cookie("accessToken",accessToken,{
+            httpOnly:true
+        })
+        .json(
+            new ApiResponse(200,null,"Access token refreshed successfully!")
+        );
+
     }
 );
 
@@ -214,7 +278,8 @@ export {
     logoutUser,
     getUser,
     updatePassword,
-    deleteUser
+    deleteUser,
+    refreshAccessToken
 
     
 };
