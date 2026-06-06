@@ -1,8 +1,45 @@
-import React from "react";
-import {Link} from "react-router-dom";
+import React, { useState } from "react";
+import {Link, useNavigate} from "react-router-dom";
+import { login } from "../services/authData.js";
 
 
 function Login(){
+
+    const [username,setUsername] = useState("");
+    const [password,setPassword] = useState("");
+    const navigate = useNavigate();
+
+    const handle_username = (e) => {
+        setUsername(e.target.value);
+    }
+    const handle_password = (e) => {
+        setPassword(e.target.value);
+    }
+
+    const userlogin = (e) => {
+        e.preventDefault();
+
+        console.log("step1")
+
+        login(username,password)
+        .then((result) => {
+            console.log("step2");
+            navigate("/message",{
+            state:{
+                message:result
+            }
+        })
+        })
+        .catch((err) => {
+            console.log("step2");
+            navigate("/message",{
+            state:{
+                message:err
+            }
+        })
+        })       
+
+    }
 
 
     return(
@@ -14,16 +51,19 @@ function Login(){
                     <form 
                     action="" 
                     method="post"
+                    onSubmit={userlogin}
                     className="w-full h-full flex flex-col items-center justify-center p-[0.01em]"
                     >
                         <input 
                         type="text" 
                         placeholder="Enter Username" 
+                        onChange={handle_username}
                         className="bg-white w-[90%] md:w-[70%] h-[12%] rounded-2xl p-[1em] m-[1em]"
                         />
                         <input 
                         type="text" 
                         placeholder="Enter password" 
+                        onChange={handle_password}
                         className="bg-white w-[90%] md:w-[70%] h-[12%] rounded-2xl p-[1em] m-[1em]"
                         />
                         <button 

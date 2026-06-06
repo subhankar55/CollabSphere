@@ -70,7 +70,7 @@ function Header(){
                         </NavLink>
                         </div>
                         {
-                        username.trim() == "" ? 
+                        !username?.trim() ? 
                         (<Link 
                          to="/login"
                          className="text-white absolute right-[1em] top-[0.4em] hover:text-cyan-400"

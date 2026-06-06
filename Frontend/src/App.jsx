@@ -9,6 +9,7 @@ import Workspace from './pages/Workspace.jsx'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import Pricing from './pages/Pricing.jsx'
+import Message from './pages/Message.jsx'
 import { AuthProvider } from './context/authContext.js'
 import { authInfo } from './services/authData.js'
 
@@ -19,10 +20,8 @@ function App() {
 
   useEffect(
     () => {
-      // Activate the below to integrate with frontend
-      // const result = authInfo();
-      // setAuth(result.username);
-      setAuth("John");
+      const result = authInfo();
+      setAuth(result.username);
     },[]
   )
 
@@ -39,6 +38,7 @@ function App() {
         </Route>
         <Route path='/login' element={<Login/>} />
         <Route path='/register' element={<Register/>}/>
+        <Route path='/message' element={<Message/>} />
       </>
     )
   )
