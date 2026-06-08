@@ -19,11 +19,10 @@ function Login(){
     const userlogin = (e) => {
         e.preventDefault();
 
-        console.log("step1")
 
         login(username,password)
         .then((result) => {
-            console.log("step2");
+            console.log(result);
             navigate("/message",{
             state:{
                 message:result
@@ -31,7 +30,7 @@ function Login(){
         })
         })
         .catch((err) => {
-            console.log("step2");
+            console.log(err);
             navigate("/message",{
             state:{
                 message:err
@@ -56,13 +55,15 @@ function Login(){
                     >
                         <input 
                         type="text" 
-                        placeholder="Enter Username" 
+                        placeholder="Enter Username"
+                        value={username} 
                         onChange={handle_username}
                         className="bg-white w-[90%] md:w-[70%] h-[12%] rounded-2xl p-[1em] m-[1em]"
                         />
                         <input 
-                        type="text" 
+                        type="password" 
                         placeholder="Enter password" 
+                        value={password}
                         onChange={handle_password}
                         className="bg-white w-[90%] md:w-[70%] h-[12%] rounded-2xl p-[1em] m-[1em]"
                         />

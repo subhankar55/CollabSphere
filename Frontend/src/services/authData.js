@@ -54,3 +54,20 @@ export const login = async function(username,password){
     }
     
 }
+
+
+export const register = async function(username,password){
+    try {
+        const res = await axios.post(
+            `http://localhost:3000/collabsphere/api/v1/auth/register`,
+            {
+                username,
+                password
+            }
+        );
+        return res.message;
+    } catch (error) {
+        console.log(error.message);
+        return error.message;
+    }
+}
