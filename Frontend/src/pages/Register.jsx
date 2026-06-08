@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {Link} from "react-router-dom";
-import { register } from "../services/authData.js";
+import { register,duplicityCheck } from "../services/authData.js";
 import { useNavigate } from "react-router-dom";
 
 
@@ -11,12 +11,14 @@ function Register(){
     const [password,setPassword] = useState("");
     const [confirmPassword,setConfirmPassword] = useState("");
     const [errorPassword,setErrorPassword] = useState("");
+    const [errorUsername,setErrorUsername] = useState("");
 
     const navigate = useNavigate();
 
 
     const handleUsername = (e) => {
         setUsername(e.target.value);
+
     }
     const handlePassword = (e) => {
         setPassword(e.target.value);
@@ -33,13 +35,32 @@ function Register(){
         else{
             setErrorPassword("");
         }
-    },[confirmPassword])
+    },[confirmPassword]);
+
+    useEffect(() => {
+        duplicityCheck(username)
+        .then((result) => {
+            if(result.data){
+                setErrorUsername("Duplicate Username!")
+            }
+            else{
+                setErrorUsername("");
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    },[username])
 
     const userRegister = (e) => {
         e.preventDefault();
 
         if(password != confirmPassword) {
             alert("Passwords do not match!");
+            return;
+        }
+        if(errorUsername.trim()){
+            alert("Username alrady exists!");
             return;
         }
 
@@ -80,6 +101,12 @@ function Register(){
                         placeholder="Enter Username" 
                         className="bg-white w-[90%] md:w-[70%] h-[12%] rounded-2xl p-[1em] m-[1em]"
                         />
+                        {
+                            errorUsername.trim() &&
+                            <p className="text-red-600 text-center">
+                                {errorUsername}
+                            </p>
+                        }
                         <input 
                         type="password" 
                         value={password}

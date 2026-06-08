@@ -290,7 +290,7 @@ const checkDuplicity = asyncHandler(
             new ApiResponse(200,user,"Duplicity checked successfully")
         )
     }
-)
+);
 
 
 
@@ -302,7 +302,8 @@ export {
     getUser,
     updatePassword,
     deleteUser,
-    refreshAccessToken
+    refreshAccessToken,
+    checkDuplicity
 
     
 };

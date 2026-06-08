@@ -100,3 +100,18 @@ export const del = async function(){
         return error.message;
     }
 }
+
+export const duplicityCheck = async function(username){
+    try {
+        const res = await axios.post(`http://localhost:3000/collabsphere/api/v1/auth/isduplicate`,{
+            username
+        },
+    {
+        withCredentials:true
+    })
+    return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Username duplicity check failed!");
+    }
+}
