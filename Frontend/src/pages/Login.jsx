@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {Link, useNavigate} from "react-router-dom";
 import { login } from "../services/authData.js";
+import { useAuth } from "../context/authContext.js";
 
 
 function Login(){
@@ -8,6 +9,7 @@ function Login(){
     const [username,setUsername] = useState("");
     const [password,setPassword] = useState("");
     const navigate = useNavigate();
+    const {updateUsername} = useAuth();
 
     const handle_username = (e) => {
         setUsername(e.target.value);
@@ -23,14 +25,16 @@ function Login(){
         login(username,password)
         .then((result) => {
             console.log(result);
+            updateUsername(result.username);
             navigate("/message",{
             state:{
-                message:result
+                message:result.message
             }
         })
         })
         .catch((err) => {
             console.log(err);
+            updateUsername("");
             navigate("/message",{
             state:{
                 message:err

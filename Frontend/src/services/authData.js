@@ -47,7 +47,7 @@ export const login = async function(username,password){
             }
     );
 
-        return res.data.message;
+        return res.data;
     } catch (error) {
         console.log(error.message);
         return error.message;

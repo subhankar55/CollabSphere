@@ -4,7 +4,8 @@ import { createContext,useContext } from "react";
 export const AuthContext  = createContext(
 
     {
-        username : String
+        username : String,
+        updateUsername : () => {}
     }
 );
 

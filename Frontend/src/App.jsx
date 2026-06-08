@@ -51,7 +51,7 @@ function App() {
 
 
   return (
-    <AuthProvider value={{username: auth}}>
+    <AuthProvider value={{username: auth,updateUsername: setAuth}}>
       <RouterProvider router={router}>
       </RouterProvider>
     </AuthProvider>
