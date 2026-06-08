@@ -88,3 +88,15 @@ export const logout = async function(){
         return error.message;
     }
 }
+
+export const del = async function(){
+    try {
+        const res = await axios.delete(`http://localhost:3000/collabsphere/api/v1/auth/delete`,{
+            withCredentials:true
+        })
+        return res.data.message;
+    } catch (error) {
+        console.log(error);
+        return error.message;
+    }
+}

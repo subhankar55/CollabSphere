@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { NavLink,Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext.js";
 import {FaUserCircle} from "react-icons/fa";
-import { logout } from "../services/authData.js";
+import { logout,del } from "../services/authData.js";
 
 
 function Header(){
 
 
-    const {username} = useAuth();
+    const {username,updateUsername} = useAuth();
     const navigate = useNavigate();
     
     const [open,setOpen] = useState(false);
@@ -16,6 +16,7 @@ function Header(){
         logout()
         .then((result) => {
             console.log(result);
+            updateUsername("");
             navigate("/message",{
                 state:{
                     message:result
@@ -29,6 +30,25 @@ function Header(){
                 }
             });
         })
+    }
+
+    const Delete = () => {
+        del()
+        .then((result) => {
+            updateUsername("");
+            navigate("/message",{
+                state:{
+                    message:result
+                }
+            });
+        })
+        .catch((err) => {
+            navigate("/message",{
+                state:{
+                    message:err.message
+                }
+            })
+        });
     }
 
     console.log(username);
@@ -108,7 +128,7 @@ function Header(){
                                 </button>
                                 {
                                     open && (
-                                        <div className="absolute top-[2em] right-0 md:top-auto md:right-0 rounded-md h-[15vh] md:h-[15vh] w-[25%] md:w-[15%] bg-gray-700 border-[0.05em] border-white z-50 p-[0.5em] shadow-white shadow-md">
+                                        <div className="absolute top-[2em] right-0 md:top-auto md:right-0 rounded-md h-[18vh] md:h-[18vh] w-[25%] md:w-[15%] bg-gray-700 border-[0.05em] border-white z-50 p-[0.5em] shadow-white shadow-md">
                                             <div className="m-[0.05em]">
                                                 <p className="text-white text-center">
                                                     {username}
@@ -119,6 +139,12 @@ function Header(){
                                                 className="text-cyan-200 block mx-auto hover:cursor-pointer"
                                             >
                                             Logout
+                                            </button>
+                                            <button
+                                                onClick={Delete}
+                                                className="text-red-600 block mx-auto hover:cursor-pointer"
+                                            >
+                                                Delete
                                             </button>
                                         </div>
                                     )

@@ -25,7 +25,7 @@ function Login(){
         login(username,password)
         .then((result) => {
             console.log(result);
-            updateUsername(result.username);
+            updateUsername(result.data.username);
             navigate("/message",{
             state:{
                 message:result.message

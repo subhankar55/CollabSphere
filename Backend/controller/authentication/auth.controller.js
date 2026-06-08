@@ -269,6 +269,29 @@ const refreshAccessToken = asyncHandler(
     }
 );
 
+const checkDuplicity = asyncHandler(
+    async function(req,res) {
+        // Check if the username exists
+        // get the username 
+        // validate the username
+        // search the db by this username 
+        // return the user if found else return null
+
+        const {username} = req.body;
+
+        if(!username.trim()){
+            throw new ApiError(404,"Invalid Username!");
+        }
+        const user = await User.findOne({username});
+
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(200,user,"Duplicity checked successfully")
+        )
+    }
+)
+
 
 
 
