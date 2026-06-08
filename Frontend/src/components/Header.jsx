@@ -1,18 +1,38 @@
 import React, { useState } from "react";
-import { NavLink,Link } from "react-router-dom";
-import { useAuth } from "../context";
-import {FaUserCircle} from "react-icons/fa"
+import { NavLink,Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/authContext.js";
+import {FaUserCircle} from "react-icons/fa";
+import { logout } from "../services/authData.js";
 
 
 function Header(){
 
 
     const {username} = useAuth();
+    const navigate = useNavigate();
+    
     const [open,setOpen] = useState(false);
-    const logout = () => {
-
+    const Logout = () => {
+        logout()
+        .then((result) => {
+            console.log(result);
+            navigate("/message",{
+                state:{
+                    message:result
+                }
+            });
+        })
+        .catch((err) => {
+            navigate("/message",{
+                state:{
+                    message:err
+                }
+            });
+        })
     }
 
+    console.log(username);
+    console.log(typeof username);
 
     return(
         <>
@@ -95,8 +115,8 @@ function Header(){
                                                 </p>
                                             </div>
                                             <button
-                                                onClick={logout}
-                                                className="text-cyan-200 block mx-auto"
+                                                onClick={Logout}
+                                                className="text-cyan-200 block mx-auto hover:cursor-pointer"
                                             >
                                             Logout
                                             </button>

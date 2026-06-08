@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 function Message(){
 
     const location = useLocation();
+    console.log(location);
 
     return(
 

@@ -20,12 +20,18 @@ function App() {
 
   useEffect(
     () => {
-      const result = authInfo();
-      setAuth(result.username);
+      authInfo()
+      .then((result) => {
+        console.log(result.data.username);
+        setAuth(result.data.username);
+      })
+      .catch((err) => {
+        setAuth("");
+      });
     },[]
   )
 
-
+  
 
   const router = createBrowserRouter(
     createRoutesFromElements(

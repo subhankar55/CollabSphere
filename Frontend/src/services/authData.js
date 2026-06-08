@@ -47,7 +47,7 @@ export const login = async function(username,password){
             }
     );
 
-        return res.message;
+        return res.data.message;
     } catch (error) {
         console.log(error.message);
         return error.message;
@@ -63,9 +63,26 @@ export const register = async function(username,password){
             {
                 username,
                 password
+            },
+            {
+                withCredentials:true
             }
         );
-        return res.message;
+        return res.data.message;
+    } catch (error) {
+        console.log(error.message);
+        return error.message;
+    }
+}
+
+
+
+export const logout = async function(){
+    try {
+        const res = await axios.get(`http://localhost:3000/collabsphere/api/v1/auth/logout`,{
+            withCredentials:true     
+        })
+        return res.data.message;
     } catch (error) {
         console.log(error.message);
         return error.message;
