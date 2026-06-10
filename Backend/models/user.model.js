@@ -19,16 +19,6 @@ const userSchema = new mongoose.Schema({
         },
         refresh_token:{
             type:String
-        },
-        workspaceid:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref:"workspace"
-        },
-        role:{
-            type:String,
-            required:true,
-            enum:["owner","admin","user"],
-            default:"user"
         }
 
 },{timestamps:true});
