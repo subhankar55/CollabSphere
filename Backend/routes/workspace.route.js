@@ -47,5 +47,4 @@ router.route("/:workspaceid/invitations").get(verifyJWT,getInvitations);
 
 
 
-
 export default router;
