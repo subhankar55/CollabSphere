@@ -5,6 +5,7 @@ cookie-parser
 cors
 mongoose
 mongoose-paginate-v2
+mongoose-aggregate-paginate-v2
 bcrypt
 jsonwebtoken
 
