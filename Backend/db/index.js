@@ -12,6 +12,7 @@ export async function connectDB() {
             serverSelectionTimeoutMS: 5000 
         });
       console.log("Connected to MongoDB!");
+      
   }
   catch(error){
     console.log(error);

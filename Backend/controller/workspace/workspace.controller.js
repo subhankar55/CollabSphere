@@ -33,37 +33,23 @@ const createWorkspace = asyncHandler(
             throw new ApiError(400,"Invalid user id");
         }
 
-        const session = await mongoose.startSession();
+
+        const workspace = await Workspace.create({
+                            name:workspacename,
+                            created_by:userid
+                            });
         
-        try{
-
-            session.startTransaction();
-
-            const workspace = await Workspace.create([{
-                name:workspacename,
-                created_by:userid
-            }],{session});
-
-            await WorkspaceUser.create([{
-                workspaceid:workspace[0]._id,
+        await WorkspaceUser.create({
+                workspaceid:workspace._id,
                 userid,
                 role:"owner"
-            }],{session});
+            });
 
-            await session.commitTransaction();
-
-            return res
+        return res
             .status(201)
             .json(
-                new ApiResponse(201,workspace[0],"Workspace created successfully!")
+                new ApiResponse(201,workspace,"Workspace created successfully!")
             );
-
-        }catch(error){
-            await session.abortTransaction();
-            throw error;
-        }finally{
-            session.endSession();
-        }  
 
     }
 );
@@ -236,61 +222,48 @@ const upgradeMember = asyncHandler(
         if(!userid || !isValidObjectId(userid)){
             throw new ApiError(400,"Invalid user id");
         }
-        const session = await mongoose.startSession();
 
-        try {
-            session.startTransaction();
 
-            const targetmember = await WorkspaceUser.findOne({
-                userid:memberid,
-                workspaceid
-            }).session(session);
+        const targetmember = await WorkspaceUser.findOne({
+            userid:memberid,
+            workspaceid
+        });
 
-            if(!targetmember){
+        if(!targetmember){
                 throw new ApiError(404,"Target member not found");
             }
-            if(targetmember.role === "admin" || targetmember.role === "owner"){
+        if(targetmember.role === "admin" || targetmember.role === "owner"){
                 throw new ApiError(400,"Target member is not eligible to upgrade");
             }
+        
+        const manager = await WorkspaceUser.findOne({
+            userid,
+            workspaceid
+        });
 
-            const manager = await WorkspaceUser.findOne({
-                userid,
-                workspaceid
-            }).session(session);
+        if(!manager){
+            throw new ApiError(404,"Manager not found");
+        }
 
-            if(!manager){
-                throw new ApiError(404,"Manager not found");
-
-            }
-
-            if(manager.role !== "owner"){
-                throw new ApiError(403,"You are not authorized to perform this action");
+        if(manager.role !== "owner"){
+            throw new ApiError(403,"You are not authorized to perform this action");
             
-            }
-            const member = await WorkspaceUser.findOneAndUpdate({
+        }
+
+        const member = await WorkspaceUser.findOneAndUpdate({
                 userid:memberid,
                 workspaceid
             },{
                 role:"admin"
             },{
                 new:true
-            }).session(session);
-
-            await session.commitTransaction();
-
-
-            return res
+            })
+        
+        return res
             .status(200)
             .json(
                 new ApiResponse(200,member,"Member upgraded successfully!")   
             );
-            
-        } catch (error) {
-            await session.abortTransaction();
-            throw error;
-        } finally {
-            await session.endSession();
-        }
     }
 );
 
@@ -322,57 +295,45 @@ const downgradeMember = asyncHandler(
 
         };
 
-        const session = await mongoose.startSession();
-
-        try {
-            
-            session.startTransaction();
-            const targetMember = await WorkspaceUser.findOne({
+        const targetMember = await WorkspaceUser.findOne({
                 userid:memberid,
                 workspaceid
-            }).session(session);
-            if(!targetMember){
-                throw new ApiError(404,"Target member not found");
-            }
-            if(targetMember.role === "user" || targetMember.role === "owner"){
-                throw new ApiError(400,"Target member is not eligible to downgrade");
+        });
 
-            }
-            const manager = await WorkspaceUser.findOne({
-                userid,
-                workspaceid
-            }).session(session);
-            if(!manager){
-                throw new ApiError(404,"Manager not found");
-            }
-            if(manager.role !== "owner"){
-                throw new ApiError(403,"You are not authorized to perform this action");
-
-            }
-
-            const member = await WorkspaceUser.findOneAndUpdate({
-                userid:memberid,
-                workspaceid
-            },{
-                role:"user"
-            },{
-                new:true
-            }).session(session);
-
-            await session.commitTransaction();
-            return res
-            .status(200)
-            .json(
-                new ApiResponse(200,member,"Member downgraded successfully!")
-            );
-            
-
-        } catch (error) {
-            session.abortTransaction();
-            throw error;
-        } finally {
-            session.endSession();
+        if(!targetMember){
+            throw new ApiError(404,"Target member not found");
         }
+        if(targetMember.role === "user" || targetMember.role === "owner"){
+            throw new ApiError(400,"Target member is not eligible to downgrade");
+
+        }
+        const manager = await WorkspaceUser.findOne({
+            userid,
+            workspaceid
+        });
+        if(!manager){
+            throw new ApiError(404,"Manager not found");
+        }
+        if(manager.role !== "owner"){
+            throw new ApiError(403,"You are not authorized to perform this action");
+
+        }
+
+        const member = await WorkspaceUser.findOneAndUpdate({
+            userid:memberid,
+             workspaceid
+        },{
+            role:"user"
+        },{
+            new:true
+        });
+
+        return res
+        .status(200)
+        .json(
+             new ApiResponse(200,member,"Member downgraded successfully!")
+        );
+
 
     }
 );
@@ -399,15 +360,11 @@ const deleteWorkspace = asyncHandler(
             throw new ApiError(400,"You are not authorized to delete this workspace");
         
         }
-        const session = await mongoose.startSession();
-
-        try {
-            session.startTransaction();
 
             const member = await WorkspaceUser.findOne({
                 userid,
                 workspaceid
-            }).session(session);
+            });
 
             if(!member){
                 throw new ApiError(404,"You are not a member of this workspace");
@@ -419,44 +376,37 @@ const deleteWorkspace = asyncHandler(
 
             const projects = await Project.find({
                 workspaceid
-            }).session(session);
+            });
 
             const projectIds = projects.map(project => project._id);
 
             await Task.deleteMany({
                 projectid:{$in:projectIds}
-            }).session(session);
+            });
 
             await Project.deleteMany({
                 workspaceid
-            }).session(session);
+            });
 
             await WorkspaceUser.deleteMany({
                 workspaceid
-            }).session(session);
+            });
 
             await Invitation.deleteMany({
                 workspaceid
-            }).session(session);
+            });
 
             await Workspace.deleteOne({
                 _id:workspaceid
-            }).session(session);
+            });
 
-            await session.commitTransaction();            
+                        
             return res
             .status(200)
             .json(
                 new ApiResponse(200,null,"Workspace deleted successfully!")
             );
-            
-            
-        } catch (error) {
-            session.abortTransaction();
-            throw error;
-        } finally {
-            session.endSession();
-        }
+
     }
 )
 

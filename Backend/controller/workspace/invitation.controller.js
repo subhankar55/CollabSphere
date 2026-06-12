@@ -37,12 +37,8 @@ const inviteUser = asyncHandler(
             throw new ApiError(400,"Invalid sender id");
         }
 
-        const session = await mongoose.startSession();
 
-        try {
-            session.startTransaction();
-
-            const receiver = await User.findOne({username}).session(session);
+            const receiver = await User.findOne({username});
 
             if(!receiver){
                 throw new ApiError(404,"User not found");
@@ -54,7 +50,7 @@ const inviteUser = asyncHandler(
             const existingInvitation = await Invitation.findOne({
                 workspaceid,
                 receiverid:receiver._id
-            }).session(session);
+            });
 
             if(existingInvitation){
                 throw new ApiError(400,"Invitation already sent");
@@ -63,7 +59,7 @@ const inviteUser = asyncHandler(
             const workspacemember = await WorkspaceUser.findOne({
                 workspaceid,
                 userid:receiver._id
-            }).session(session);
+            });
 
             if(workspacemember){
                 throw new ApiError(400,"User is already a member of the workspace");
@@ -72,34 +68,24 @@ const inviteUser = asyncHandler(
             const inviter = await WorkspaceUser.findOne({
                 workspaceid,
                 userid:senderid
-            }).session(session);
+            });
 
             if(!inviter || inviter.role === "user"){
                 throw new ApiError(400,"You are not elgible to send an invitation");
             }
 
-            const invitation = await Invitation.create([{
+            const invitation = await Invitation.create({
                 workspaceid,
                 senderid,
                 receiverid:receiver._id
-            }],{session});
-
-            await session.commitTransaction();
+            });
 
 
             return res
             .status(201)
             .json(
-                new ApiResponse(201,invitation[0],"Invitation sent successfully!")
+                new ApiResponse(201,invitation,"Invitation sent successfully!")
             );
-
-            
-        } catch (error) {
-            await session.abortTransaction();
-            throw error;
-        } finally {
-            await session.endSession();
-        }
 
     }
 

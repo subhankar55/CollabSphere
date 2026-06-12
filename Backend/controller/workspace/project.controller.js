@@ -39,16 +39,11 @@ const createProject = asyncHandler(
         if(!userid || !isValidObjectId(userid)){
             throw new ApiError(400,"You are not authorized  to create a new prject");
         }
-        const session = await mongoose.startSession();
-
-
-        try {
-            session.startTransaction();
 
             const member = await WorkspaceUser.findOne({
                 userid,
                 workspaceid
-            }).session(session);
+            });
 
             if(!member){
                 throw new ApiError(404,"You are not a member of this workspace");
@@ -57,26 +52,16 @@ const createProject = asyncHandler(
                 throw new ApiError(403,"You are not authorized to create a new project");
             }
             
-            const project = await Project.create([{
+            const project = await Project.create({
                 projectname,
                 workspaceid,
                 created_by:userid
-            }],{session});
-
-            await session.commitTransaction();
+            });
             return res
             .status(201)
             .json(
                 new ApiResponse(201,project,"Project created successfully!")
             );
-
-        } catch (error) {
-            await session.abortTransaction();
-            throw error;
-        } finally {
-            await session.endSession();
-        }
-        
     }
 
 )
@@ -103,16 +88,12 @@ const deleteProject = asyncHandler(
         if(!workspaceid || !isValidObjectId(workspaceid)){
             throw new ApiError(400,"Invalid workspace id");
         }
-        
-        const session = await mongoose.startSession();
 
-        try {
-            session.startTransaction();
 
             const member = await WorkspaceUser.findOne({
                 userid,
                 workspaceid
-            }).session(session);
+            });
 
             if(!member){
                 throw new ApiError(404,"You are not a member of this workspace");
@@ -124,26 +105,19 @@ const deleteProject = asyncHandler(
             }
             await Task.deleteMany({
                 projectid
-            }).session(session);
+            });
 
             await Project.deleteOne({
                 _id:projectid
-            }).session(session);
+            });
 
-            await session.commitTransaction();
+
             return res
             .status(200)
             .json(
                 new ApiResponse(200,null,"Project deleted successfully!")
             );
 
-            
-        } catch (error) {
-            await session.abortTransaction();
-            throw error;
-        } finally {
-            await session.endSession();
-        }
     }
 )
 
