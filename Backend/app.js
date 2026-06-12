@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRouter from "../Backend/routes/auth.routes.js";
+import workspaceRouter from "../Backend/routes/workspace.route.js";
+
 
 
 
@@ -21,6 +23,7 @@ app.use(cookieParser());
 
 
 app.use("/collabsphere/api/v1/auth",authRouter);
+app.use("/collabsphere/api/v1/workspace",workspaceRouter);
 
 
 

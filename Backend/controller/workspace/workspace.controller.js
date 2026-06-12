@@ -2,6 +2,9 @@ import asyncHandler from "../../utils/asyncHandler.utils.js"
 import Workspace from "../../models/workspace.model.js"
 import WorkspaceUser from "../../models/workspaceUser.model.js";
 import User from "../../models/user.model.js";
+import Invitation from "../../models/workspaceInvitation.model.js";
+import Project from "../../models/projects.model.js";
+import Task from "../../models/tasks.model.js";
 import ApiError from "../../utils/ApiError.utils.js";
 import ApiResponse from "../../utils/ApiResponse.utils.js";
 import { isValidObjectId } from "mongoose";
@@ -374,12 +377,100 @@ const downgradeMember = asyncHandler(
     }
 );
 
+const deleteWorkspace = asyncHandler(
+
+    async (req,res) => {
+        // delete an workspace 
+        // get the workspace id
+        // get the userid
+        // validate them
+        // check if the user owner
+        // delete the workspace and all info regarding this workspace 
+        // return res
+
+        const {workspaceid} = req.params;
+        const userid = req.user._id;
+
+        if(!workspaceid || !isValidObjectId(workspaceid)){
+            throw new ApiError(400,"Invalid workspace id");
+
+        }
+        if(!userid || !isValidObjectId(userid)){
+            throw new ApiError(400,"You are not authorized to delete this workspace");
+        
+        }
+        const session = await mongoose.startSession();
+
+        try {
+            session.startTransaction();
+
+            const member = await WorkspaceUser.findOne({
+                userid,
+                workspaceid
+            }).session(session);
+
+            if(!member){
+                throw new ApiError(404,"You are not a member of this workspace");
+            }
+
+            if(member.role !== "owner"){
+                throw new ApiError(403,"You are not authorized to delete this workspace");
+            }
+
+            const projects = await Project.find({
+                workspaceid
+            }).session(session);
+
+            const projectIds = projects.map(project => project._id);
+
+            await Task.deleteMany({
+                projectid:{$in:projectIds}
+            }).session(session);
+
+            await Project.deleteMany({
+                workspaceid
+            }).session(session);
+
+            await WorkspaceUser.deleteMany({
+                workspaceid
+            }).session(session);
+
+            await Invitation.deleteMany({
+                workspaceid
+            }).session(session);
+
+            await Workspace.deleteOne({
+                _id:workspaceid
+            }).session(session);
+
+            await session.commitTransaction();            
+            return res
+            .status(200)
+            .json(
+                new ApiResponse(200,null,"Workspace deleted successfully!")
+            );
+            
+            
+        } catch (error) {
+            session.abortTransaction();
+            throw error;
+        } finally {
+            session.endSession();
+        }
+    }
+)
+
 
 
 export {
     createWorkspace,
     joinWorkspace,
     getWorkspaceById,
-    getAllWorkspacesId
+    getAllWorkspacesId,
+    getAllWorkspaceUsers,
+    upgradeMember,
+    downgradeMember,
+    deleteWorkspace
+
 };
 
