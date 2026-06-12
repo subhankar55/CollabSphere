@@ -411,6 +411,33 @@ const deleteWorkspace = asyncHandler(
 )
 
 
+const getWorkspaceByName = asyncHandler(
+    
+    async (req,res) => {
+        // get the workspace by name
+        // get the workspace name
+        // validate the workspace name
+        // check db if any document of that name exists
+        // return res
+
+        const workspacename = req.body.name?.trim();
+        if(!workspacename){
+            throw new ApiError(400,"Workspace name is required");
+        }
+        const workspace = await Workspace.findOne({name:workspacename});
+
+        if(!workspace){
+            throw new ApiError(404,"Workspace not found");
+        }
+        return res  
+        .status(200)
+        .json(
+            new ApiResponse(200,workspace,"Workspace fetched successfully!")
+        )
+    }
+
+)
+
 
 export {
     createWorkspace,
@@ -420,7 +447,8 @@ export {
     getAllWorkspaceUsers,
     upgradeMember,
     downgradeMember,
-    deleteWorkspace
+    deleteWorkspace,
+    getWorkspaceByName
 
 };
 
