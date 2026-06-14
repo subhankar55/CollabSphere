@@ -4,11 +4,12 @@ import {
     createWorkspace,
     joinWorkspace,
     getWorkspaceById,
-    getAllWorkspacesId,
+    getAllWorkspaces,
     getAllWorkspaceUsers,
     upgradeMember,
     downgradeMember,
-    deleteWorkspace
+    deleteWorkspace,
+    getWorkspaceByName
 
  } from "../controller/workspace/workspace.controller.js";
 import {
@@ -31,7 +32,8 @@ const router = Router();
 
 router.route("/create").post(verifyJWT,createWorkspace);
 router.route("/join/:workspaceid").get(verifyJWT,joinWorkspace);
-router.route("/workspaces").get(verifyJWT,getAllWorkspacesId);
+router.route("/allworkspaces").get(verifyJWT,getAllWorkspaces);
+router.route("/getWorkspace").post(verifyJWT,getWorkspaceByName);
 router.route("/:workspaceid").get(verifyJWT,getWorkspaceById);
 router.route("/:workspaceid/users").get(verifyJWT,getAllWorkspaceUsers);
 router.route("/:workspaceid/users/:userid/upgrade").patch(verifyJWT,upgradeMember);

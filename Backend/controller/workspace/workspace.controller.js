@@ -115,7 +115,7 @@ const getWorkspaceById = asyncHandler(
     }
 )
 
-const getAllWorkspacesId = asyncHandler(
+const getAllWorkspaces = asyncHandler(
 
     async (req,res) => {
         // get all workspaces of an user
@@ -129,7 +129,37 @@ const getAllWorkspacesId = asyncHandler(
             throw new ApiError(400,"Invalid user id");
 
         }
-        const workspaces = await WorkspaceUser.find({userid});
+        const workspaces = await WorkspaceUser.aggregate(
+            [
+                {
+                    $match:{
+                        userid:new mongoose.Types.ObjectId(userid)
+                    }
+
+                },
+                {
+                    $lookup:{
+                        from:"workspaces",
+                        localField:"workspaceid",
+                        foreignField:"_id",
+                        as:"workspace"
+                    }
+                },
+                {
+                    $unwind:"$workspace"
+
+                },
+                {
+                    $project:{
+                        _id:0,
+                        workspaceid:"$workspace._id",
+                        name:"$workspace.name",
+                        role:"$role"
+                    }
+
+                }
+            ]
+        )
 
         if(workspaces.length === 0){
             throw new ApiError(404,"No workspaces found");
@@ -443,7 +473,7 @@ export {
     createWorkspace,
     joinWorkspace,
     getWorkspaceById,
-    getAllWorkspacesId,
+    getAllWorkspaces,
     getAllWorkspaceUsers,
     upgradeMember,
     downgradeMember,
