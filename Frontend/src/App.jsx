@@ -10,6 +10,7 @@ import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import Pricing from './pages/Pricing.jsx'
 import Message from './pages/Message.jsx'
+import Project from './pages/Projects.jsx'
 import { AuthProvider } from './context/authContext.js'
 import { authInfo } from './services/authData.js'
 
@@ -45,6 +46,7 @@ function App() {
         <Route path='/login' element={<Login/>} />
         <Route path='/register' element={<Register/>}/>
         <Route path='/message' element={<Message/>} />
+        <Route path='/projects' element={<Project/>} />
       </>
     )
   )

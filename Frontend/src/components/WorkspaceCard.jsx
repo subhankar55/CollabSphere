@@ -1,10 +1,19 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 
 function WorkspaceCard({workspace}){
 
-    const enter = (workspaceid) => {
+    const navigate = useNavigate();
 
+    const enter = (workspaceid,name) => {
+
+        navigate("/projects",{
+            state:{
+                workspaceid,
+                name
+            }
+        })
     }
 
     const Delete = (workspaceid) => {
@@ -15,7 +24,7 @@ function WorkspaceCard({workspace}){
 
     return(
         <>
-        <div className="bg-gray-700 w-[90%] mx-auto p-[1em] rounded-lg">
+        <div className="bg-gray-700 w-[90%] mx-auto my-[1em] p-[1em] rounded-lg">
             <div className="text-white text-center">
                 {workspace.name}
             </div>
@@ -24,13 +33,13 @@ function WorkspaceCard({workspace}){
             </div>
             <div className="flex flex-col md:flex-row justify-center items-center gap-[1em] my-[0.5em]">
                 <button
-                className="bg-green-500 px-[0.5em] rounded-md text-white"
-                onClick={() => enter(workspace.workspaceid)}
+                className="bg-green-500 px-[0.5em] rounded-md text-white hover:cursor-pointer"
+                onClick={() => enter(workspace.workspaceid,workspace.name)}
                 >
                     Enter
                 </button>
                 <button
-                className="bg-red-400 px-[0.5em] rounded-md text-white"
+                className="bg-red-400 px-[0.5em] rounded-md text-white hover:cursor-pointer"
                 onClick={() => Delete(workspace.workspaceid)}
                 >
                     Delete
