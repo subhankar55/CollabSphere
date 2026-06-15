@@ -153,6 +153,7 @@ function Project(){
                                         projectname={project.projectname}
                                         userid={project.created_by}
                                         projectid={project._id}
+                                        workspaceid={location.state?.workspaceid}
                                         />
                                     )
                                 })

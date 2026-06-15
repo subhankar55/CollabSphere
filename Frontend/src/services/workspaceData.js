@@ -159,3 +159,71 @@ export const workspaceById = async function(workspaceid){
     
     }
 }
+
+
+export const joinWorkspace = async function(invitationid,workspaceid){
+    try{
+
+        await axios.patch(`http://localhost:3000/collabsphere/api/v1/workspace/invitation/accept/${invitationid}`,
+            {},
+            {
+                withCredentials:true
+            
+            }
+        );
+
+        const res = await axios.get(`http://localhost:3000/collabsphere/api/v1/workspace/join/${workspaceid}`,
+            {
+                withCredentials:true
+            }
+        );
+
+        return res.data;
+
+    }catch(error){
+        console.log(error);
+        throw new Error(error.message);
+    
+    }
+}
+
+
+export const rejectInvitation = async function(invitationid){
+
+    try {
+
+        const res = await axios.patch(`http://localhost:3000/collabsphere/api/v1/workspace/invitation/reject/${invitationid}`,
+            {},
+            {
+                withCredentials:true
+            }
+
+        );
+        console.log(res);
+        return res.data;
+        
+    } catch (error) {
+        console.log(error.message);
+        return error.message;
+    
+    }
+}
+
+
+export const deleteWorkspace = async function(workspaceid){
+    try {
+
+        const res = await axios.delete(`http://localhost:3000/collabsphere/api/v1/workspace/${workspaceid}/delete`,
+            {
+                withCredentials:true
+            }
+        );
+        console.log(res);
+        return res.data;
+        
+    } catch (error) {
+        console.log(error);
+        throw new Error(error.message);
+    
+    }
+}

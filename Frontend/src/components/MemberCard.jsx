@@ -12,6 +12,14 @@ function MemberCard({member}){
             <h2 className="text-white text-center">
                 Role: {member.role}
             </h2>
+            <div className="flex gap-[2em] items-center justify-center">
+                <button className="bg-green-500 px-[0.5em] rounded-md hover:cursor-pointer hover:text-black">
+                    up
+                </button>
+                <button className="bg-red-500 px-[0.5em] rounded-md hover:cursor-pointer hover:text-black">
+                    down
+                </button>
+            </div>
         </div>
 
         </>

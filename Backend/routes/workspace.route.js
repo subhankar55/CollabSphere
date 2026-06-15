@@ -22,7 +22,10 @@ import {
 
 import {
     inviteUser,
-    getInvitations
+    getInvitations,
+    acceptInvitation,
+    rejectInvitation
+
 
 } from "../controller/workspace/invitation.controller.js";
 
@@ -35,6 +38,9 @@ router.route("/join/:workspaceid").get(verifyJWT,joinWorkspace);
 router.route("/allworkspaces").get(verifyJWT,getAllWorkspaces);
 router.route("/getWorkspace").post(verifyJWT,getWorkspaceByName);
 router.route("/invitations").get(verifyJWT,getInvitations);
+
+router.route("/invitation/accept/:invitationid").patch(verifyJWT,acceptInvitation);
+router.route("/invitation/reject/:invitationid").patch(verifyJWT,rejectInvitation);
 
 router.route("/:workspaceid").get(verifyJWT,getWorkspaceById);
 router.route("/:workspaceid/users").get(verifyJWT,getAllWorkspaceUsers);

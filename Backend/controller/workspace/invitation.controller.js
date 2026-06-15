@@ -49,7 +49,8 @@ const inviteUser = asyncHandler(
             }
             const existingInvitation = await Invitation.findOne({
                 workspaceid,
-                receiverid:receiver._id
+                receiverid:receiver._id,
+                status:"pending"
             });
 
             if(existingInvitation){
@@ -122,10 +123,87 @@ const getInvitations = asyncHandler(
     }
 )
 
+const acceptInvitation = asyncHandler(
+
+    async (req,res) => {
+        // accept an invitation
+        // get the invitation id
+        // validate it
+        // search the invitation document
+        // update the status to accepted
+        // return res
+
+        const {invitationid} = req.params;
+
+        if(!invitationid || !isValidObjectId(invitationid)){
+            throw new ApiError(400,"Invalid invitation id");
+
+        }
+
+        const invitation = await Invitation.findById(invitationid);
+
+        if(!invitation){
+            throw new ApiError(404,"Invitation not found");
+        }
+
+        invitation.status = "accepted";
+
+        await invitation.save();
+
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(200,invitation,"Invitation accepted successfully!")
+        );
+
+
+    }
+)
+
+
+const rejectInvitation = asyncHandler(
+
+    async (req,res) => {
+        // reject an invitation
+        // get the invitation id
+        // validate it
+        // search the invitation document
+        // update the status to rejected
+        // return res
+
+        const {invitationid} = req.params;
+
+        if(!invitationid || !isValidObjectId(invitationid)){
+            throw new ApiError(400,"Invalid invitation id");
+
+        }
+
+        const invitation = await Invitation.findById(invitationid);
+
+        if(!invitation){
+            throw new ApiError(404,"Invitation not found");
+        }
+
+        invitation.status = "rejected";
+
+        await invitation.save();
+
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(200,invitation,"Invitation rejected successfully!")
+        );
+
+
+    }
+)
 
 
 export {
     inviteUser,
-    getInvitations
+    getInvitations,
+    acceptInvitation,
+    rejectInvitation
+
 
 };

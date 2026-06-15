@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { getUserById } from "../services/authData.js";
-import { workspaceById } from "../services/workspaceData.js";
+import { joinWorkspace, rejectInvitation, workspaceById } from "../services/workspaceData.js";
+import { useNavigate } from "react-router-dom";
+
+
 
 
 
@@ -10,6 +13,8 @@ function InvitationCard({invitation}){
     const [workspace,setWorkspace] = useState("");
     const senderid = invitation.senderid;
     const workspaceid = invitation.workspaceid;
+    const navigate = useNavigate();
+
 
     useEffect(()=>{
         getUserById(senderid)
@@ -33,12 +38,41 @@ function InvitationCard({invitation}){
         })
     },[]);
 
-    const join = () => {
+    const join = (e) => {
 
+        e.preventDefault();
+
+        joinWorkspace(invitation?._id,workspaceid)
+        .then((result) => {
+            console.log(result);
+            window.location.reload();
+        })
+        .catch((err) => {
+            console.log(err);
+        })
     }
 
-    const reject = () => {
+    const reject = (e) => {
 
+        e.preventDefault();
+
+        rejectInvitation(invitation?._id)
+        .then((result) => {
+            console.log(result);
+            navigate("/message",{
+                state:{
+                    message:result.message
+                }
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            navigate("/message",{
+                state:{
+                    message:err.message
+                }
+            });
+        })
     }
 
     return(

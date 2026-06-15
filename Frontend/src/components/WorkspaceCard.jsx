@@ -1,5 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { deleteWorkspace } from "../services/workspaceData";
+
 
 
 function WorkspaceCard({workspace}){
@@ -18,6 +20,19 @@ function WorkspaceCard({workspace}){
 
     const Delete = (workspaceid) => {
 
+        deleteWorkspace(workspaceid)
+        .then((result) => {
+            console.log(result);
+            window.location.reload();
+        })
+        .catch((err) => {
+            console.log(err);
+            navigate("/message",{
+                state:{
+                    message:err.message || "Something went wrong"
+                }
+            })
+        })
     }
 
 

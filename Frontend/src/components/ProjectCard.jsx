@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getUserById } from "../services/authData";
+import { deleteProject, deleteWorkspace } from "../services/workspaceData";
+import { useNavigate } from "react-router-dom";
 
-function ProjectCard({projectname,userid,projectid}){
+function ProjectCard({projectname,userid,projectid,workspaceid}){
     const [username,setUsername] = useState("");
+
+    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -19,13 +23,35 @@ function ProjectCard({projectname,userid,projectid}){
     },[])
 
 
-    const Enter = () => {
+    const Enter = (e) => {
+        e.preventDefault();
 
+        navigate("/tasks",{
+            state:{
+                projectid,
+                projectname
+            }
+        })
     }
 
 
-    const Delete = () => {
+    const Delete = (e) => {
 
+        e.preventDefault();
+
+        deleteProject(workspaceid,projectid)
+        .then((result) => {
+            console.log(result);
+            window.location.reload();
+        })
+        .catch((err) => {
+            console.log(err.message);
+            navigate("/message",{
+                state:{
+                    message:err.message || "Something went wrong!"
+                }
+            })
+        })
     }
     
     return(
