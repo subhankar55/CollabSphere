@@ -105,13 +105,14 @@ const getInvitations = asyncHandler(
             throw new ApiError(400,"Invalid user id");
         }
 
-        const invitations = await Invitation.find({receiverid:userid});
+        const invitations = await Invitation.find({receiverid:userid,status:"pending"});
 
+        console.log(invitations);
         if(invitations.length === 0) {
             throw new ApiError(404,"No invitations found");
         
         }
-
+        
         return res
         .status(200)
         .json(

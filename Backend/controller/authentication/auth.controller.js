@@ -292,6 +292,35 @@ const checkDuplicity = asyncHandler(
     }
 );
 
+const UserById = asyncHandler(
+    async function(req,res){
+        // get user by id
+        // get the userid
+        // validate it
+        // search db for the user by id
+        // return res
+
+        const {userid} = req.params;
+
+        if(!userid || !isValidObjectId(userid)){
+            throw new ApiError(400,"Invalid user!");
+        }
+
+        const user = await User.findById(userid);
+
+        if(!user){
+            throw new ApiError(404,"User not found!");
+        }
+
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(200,user,"User fetched successfully!")
+        );
+    }
+)
+
+
 
 
 
@@ -303,7 +332,8 @@ export {
     updatePassword,
     deleteUser,
     refreshAccessToken,
-    checkDuplicity
+    checkDuplicity,
+    UserById
 
     
 };

@@ -34,6 +34,8 @@ router.route("/create").post(verifyJWT,createWorkspace);
 router.route("/join/:workspaceid").get(verifyJWT,joinWorkspace);
 router.route("/allworkspaces").get(verifyJWT,getAllWorkspaces);
 router.route("/getWorkspace").post(verifyJWT,getWorkspaceByName);
+router.route("/invitations").get(verifyJWT,getInvitations);
+
 router.route("/:workspaceid").get(verifyJWT,getWorkspaceById);
 router.route("/:workspaceid/users").get(verifyJWT,getAllWorkspaceUsers);
 router.route("/:workspaceid/users/:userid/upgrade").patch(verifyJWT,upgradeMember);
@@ -44,7 +46,6 @@ router.route("/:workspaceid/project/:projectid/delete").delete(verifyJWT,deleteP
 router.route("/:workspaceid/project/:projectid").get(verifyJWT,getProjectById);
 router.route("/:workspaceid/projects").get(verifyJWT,getAllProjects);
 router.route("/:workspaceid/invite").post(verifyJWT,inviteUser);
-router.route("/:workspaceid/invitations").get(verifyJWT,getInvitations);
 
 
 

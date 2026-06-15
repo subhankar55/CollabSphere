@@ -115,3 +115,14 @@ export const duplicityCheck = async function(username){
         throw new Error("Username duplicity check failed!");
     }
 }
+
+export const getUserById = async function(userid){
+    try{
+        const res = await axios.get(`http://localhost:3000/collabsphere/api/v1/auth/userById/${userid}`,{
+            withCredentials:true
+        });
+        return res.data;
+    }catch(error){
+        throw new Error(error.message);
+    }
+}

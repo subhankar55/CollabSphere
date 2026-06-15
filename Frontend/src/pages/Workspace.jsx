@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { getAllworkspaces, 
         getWorkspaceByname, 
-        createWorkspace 
+        createWorkspace,
+        allInvitations 
 
 } from "../services/workspaceData.js";
 import WorkspaceCard from "../components/WorkspaceCard.jsx";
+import InvitationCard from "../components/InvitationCard.jsx";
 import { useNavigate } from "react-router-dom";
 
 function Workspace(){
@@ -14,6 +16,7 @@ function Workspace(){
     const [workspacename,setWorkspacename] = useState("");
     const [workspaces,setWorkspaces] = useState([]);
     const [errorWorkspacename,setErrorWorkspacename] = useState("")
+    const [invitations,setInvitations] = useState([]);
 
     const navigate = useNavigate();
 
@@ -59,6 +62,20 @@ function Workspace(){
         })
     },
     []);
+
+
+    useEffect(() => {
+        allInvitations()
+        .then((result) => {
+            console.log(result);
+            setInvitations(result.data);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    },
+    []);
+
 
     useEffect(() => {
         getWorkspaceByname(workspacename)
@@ -149,6 +166,17 @@ function Workspace(){
                         <h2 className="text-cyan-200 text-center text-lg p-[1em]">
                             Invitations!
                         </h2>
+                        {   invitations?.length > 0 &&
+                            invitations.map((invitation) => {
+                                return(
+                                    <InvitationCard
+                                    key={invitation._id}
+                                    invitation={invitation}
+                                    />
+                                )
+                                
+                            })
+                        }
                      </div>
                 </div>
 

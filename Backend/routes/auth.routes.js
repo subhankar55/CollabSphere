@@ -6,7 +6,8 @@ import { registerUser,
         updatePassword,
         deleteUser,
         refreshAccessToken,
-        checkDuplicity
+        checkDuplicity,
+        UserById
     
 } from "../controller/authentication/auth.controller.js";
 import verifyJWT from "../middlewares/auth.middleware.js";
@@ -24,6 +25,7 @@ router.route("/forgetPassword").patch(updatePassword);
 router.route("/delete").delete(verifyJWT,deleteUser);
 router.route("/refresh").get(refreshAccessToken);
 router.route("/isduplicate").post(checkDuplicity);
+router.route("/userById/:userid").get(UserById);
 
 
 
