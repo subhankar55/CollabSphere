@@ -1,14 +1,81 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
+import { useEffect } from "react";
+import { createTask } from "../services/taskData.js";
+import { useNavigate } from "react-router-dom";
+
+
 
 
 
 function Tasks(){
 
     const location = useLocation();
+    const navigate = useNavigate();
     const [open,setOpen] = useState(false);
+    const [description,setDescription] = useState("");
+    const [username,setUsername] = useState("");
+    const [deadline,setDeadline] = useState(null);
+    const [priority,setPriority] = useState("");
+    const [url,setUrl] = useState("");
+    const [days,setDays] = useState(null);
 
+    const handleDescription = (e) => {
+        setDescription(e.target.value);
+    }
+
+    const handleUsername = (e) => {
+        setUsername(e.target.value);
+    }
+
+    const handleDays = (e) => {
+        setDays(Number(e.target.value));
+    }
+
+    useEffect(() => {
+        const date = new Date();
+        date.setDate(date.getDate() + days);
+        setDeadline(date);        
+    },[days])
+
+    const handlePriority = (e) => {
+        setPriority(e.target.value);
+    }
+
+    const handleUrl = (e) => {
+        setUrl(e.target.value);
+    }
+
+    const makeTask = (e) => {
+        e.preventDefault();
+        console.log(deadline);
+        console.log(description);
+        console.log(username);
+        console.log(priority);
+        console.log(url);
+        console.log(location.state?.projectid);
+
+        createTask(description,username,deadline,priority,url,location.state?.projectid)
+        .then((result) => {
+            console.log(result);
+            navigate("/message",{
+                state:{
+                    message:result.message
+                }
+            })
+
+        })
+        .catch((err) => {
+            console.log(err.message);
+            navigate("/message",{
+                state:{
+                    message:err.message || "Something went wrong!"
+                }
+            })
+        });
+
+    }
 
 
     return(
@@ -55,12 +122,54 @@ function Tasks(){
                         <form 
                         action="" 
                         method="post"
-                        className="m-[0.5em] flex flex-col md:flex-row items-center justify-center gap-[1em]"
+                        onSubmit={makeTask}
+                        className="m-[0.5em] flex flex-col items-center justify-center gap-[1em]"
                         >
-                            <input type="text"
-                            placeholder="Task name"
-                            className="bg-white p-[0.1em] w-[95%] md:w-[60%]"
+                            <input 
+                            type="text"
+                            placeholder="Describe the task"
+                            value={description}
+                            onChange={handleDescription}
+                            className="bg-white p-[0.4em] w-[95%] md:w-[80%] h-[5vh] rounded-md"
                             />
+                            <input 
+                            type="text" 
+                            placeholder="Username of member"
+                            value={username}
+                            onChange={handleUsername}
+                            className="bg-white p-[0.4em] w-[95%] md:w-[80%] h-[5vh] rounded-md"
+                            />
+                            <input 
+                            type="number"
+                            placeholder="Enter deadline"
+                            step="1"
+                            min="0"
+                            value={days}
+                            onChange={handleDays}
+                            className="bg-white p-[0.4em] w-[95%] md:w-[80%] h-[5vh] rounded-md"
+                            />
+                            <div className="bg-white p-[0.4em] w-[95%] md:w-[80%] h-[5vh] rounded-md">
+                                <label htmlFor="priority">Priority:</label>
+                                <select 
+                                name="priority" 
+                                id="priority"
+                                value={priority}
+                                onChange={handlePriority}
+                                >
+                                    <option value="">Select Priority</option>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <input 
+                            type="url" 
+                            placeholder="Enter platform url"
+                            value={url}
+                            onChange={handleUrl}
+                            className="bg-white p-[0.4em] w-[95%] md:w-[80%] h-[5vh] rounded-md"
+                            />
+                            
                             <button 
                             type="submit"
                             className="bg-green-500 text-white rounded-md px-[0.5em] hover:cursor-pointer"
