@@ -10,7 +10,9 @@ const chatSchema = new mongoose.Schema({
     },
     sender:{
         type: mongoose.Schema.Types.ObjectId,
-        ref:"user"
+        ref:"user",
+        required:true
+    
     },
     sent:{
         type:Boolean,

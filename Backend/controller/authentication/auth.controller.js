@@ -4,6 +4,13 @@ import ApiError from "../../utils/ApiError.utils.js";
 import ApiResponse from "../../utils/ApiResponse.utils.js";
 import asyncHandler from "../../utils/asyncHandler.utils.js";
 import jwt from "jsonwebtoken";
+import Invitation from "../../models/workspaceInvitation.model.js";
+import WorkspaceUser from "../../models/workspaceUser.model.js";
+import Project from "../../models/projects.model.js";
+import Task from "../../models/tasks.model.js";
+import Chat from "../../models/chat.model.js";
+import Notification from "../../models/notification.model.js";
+import Workspace from "../../models/workspace.model.js";
 
 
 
@@ -207,6 +214,14 @@ const deleteUser = asyncHandler(
         if(!userid || !isValidObjectId(userid)){
             throw new ApiError(400,"Invalid user!");
         }
+
+        await WorkspaceUser.deleteMany({userid:userid});
+        await Invitation.deleteMany({$or:[{senderid:userid},{receiverid:userid}]});
+        await Project.deleteMany({created_by:userid});
+        await Task.deleteMany({$or:[{created_by:userid},{assigned_to:userid}]});
+        await Chat.deleteMany({sender:userid});
+        await Notification.deleteMany({$or:[{reciepent:userid},{sender:userid}]});
+        await Workspace.deleteMany({created_by:userid});
 
         await User.deleteOne({_id:userid});
 

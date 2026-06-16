@@ -227,3 +227,34 @@ export const deleteWorkspace = async function(workspaceid){
     
     }
 }
+
+
+export const upgradeUser = async function(workspaceid,userid){
+    try{
+        const res = await axios.patch(`http://localhost:3000/collabsphere/api/v1/workspace/${workspaceid}/users/${userid}/upgrade`,
+            {},
+            {
+                withCredentials:true
+            }
+        );
+        return res.data;
+    }catch(error){
+        throw new Error(error.message);
+    
+    }
+}
+
+export const downgradeUser = async function(workspaceid,userid){
+    try{
+        const res = await axios.patch(`http://localhost:3000/collabsphere/api/v1/workspace/${workspaceid}/users/${userid}/downgrade`,
+            {},
+            {
+                withCredentials:true
+            }
+        );
+        return res.data;
+    }catch(error){
+        throw new Error(error.message);
+    
+    }
+}

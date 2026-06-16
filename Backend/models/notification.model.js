@@ -10,11 +10,13 @@ const notificationSchema = new mongoose.Schema({
     },
     reciepent:{
         type: mongoose.Schema.Types.ObjectId,
-        ref:"user"
+        ref:"user",
+        required:true
     },
     sender:{
         type: mongoose.Schema.Types.ObjectId,
-        ref:"user"
+        ref:"user",
+        required:true
         },
     
     markedasread:{

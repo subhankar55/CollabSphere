@@ -124,7 +124,7 @@ function Project(){
                         </form>
                     </div>
                     <div className="flex flex-col md:flex-row gap-[1em] justify-center items-center">
-                        <div className="text-white h-[85vh] w-[80%] md:w-[25%] border-[0.1em] border-cyan-300">
+                        <div className="text-white h-[85vh] w-[80%] md:w-[25%] border-[0.1em] border-cyan-300 rounded-md overflow-auto">
                             <h1 className="text-white text-center">
                                 Members
                             </h1>
@@ -135,12 +135,13 @@ function Project(){
                                         <MemberCard
                                         key={member.userid}
                                         member={member}
+                                        workspaceid={location.state?.workspaceid}
                                         />
                                     )
                                 })
                             }
                         </div>
-                        <div className="text-white h-[85vh] w-[80%] md:w-[45%] border-[0.1em] border-cyan-300 ">
+                        <div className="text-white h-[85vh] w-[80%] md:w-[45%] border-[0.1em] border-cyan-300 rounded-md overflow-auto">
                             <h1 className="text-center text-white">
                                 Projects
                             </h1>
@@ -159,7 +160,7 @@ function Project(){
                                 })
                             }
                         </div>
-                        <div className="text-white h-[85vh] w-[80%] md:w-[55%] border-[0.1em] border-cyan-300">
+                        <div className="text-white h-[85vh] w-[80%] md:w-[55%] border-[0.1em] border-cyan-300 rounded-md overflow-auto">
                             <h1 className="text-white text-center">
                                 Chat
                             </h1>

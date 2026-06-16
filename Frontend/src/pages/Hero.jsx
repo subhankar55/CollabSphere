@@ -2,6 +2,7 @@ import React from "react";
 import bgimage from "../assets/HeroBg.jpg";
 import { motion } from "framer-motion";
 import {useMediaQuery} from "react-responsive";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -10,12 +11,29 @@ import {useMediaQuery} from "react-responsive";
 function Hero(){
 
 const isMobile = useMediaQuery({maxWidth: 768});
+const navigate = useNavigate();
+
+const toRegister = (e) => {
+
+    e.preventDefault();
+
+    navigate("/register");
+
+}
 
     return(
         <div>
             <div className="min-h-screen relative">
                 <div className="absolute inset-0 bg-black">
-                    <div className="min-h-screen flex items-center justify-center">
+                    <div className="min-h-screen flex flex-col items-center justify-center gap-[4em]">
+                        <div>
+                            <button
+                            onClick={toRegister}
+                            className="text-white bg-orange-600 px-[0.5em] rounded-lg hover:cursor-pointer hover:bg-orange-900 hover:text-cyan-200"
+                            >
+                                Register
+                            </button>
+                        </div>
                         <motion.div className="h-[70vh] w-[90%] md:w-[60%] bg-cover bg-center border-2 border-cyan-400 rounded-lg relative overflow-y-auto"
                             style={{
                                 backgroundImage:`url(${bgimage})`,
