@@ -2,8 +2,9 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
-import { createTask } from "../services/taskData.js";
+import { createTask, getAllTasks } from "../services/taskData.js";
 import { useNavigate } from "react-router-dom";
+import TaskCard from "../components/TaskCard.jsx";
 
 
 
@@ -20,6 +21,8 @@ function Tasks(){
     const [priority,setPriority] = useState("");
     const [url,setUrl] = useState("");
     const [days,setDays] = useState(null);
+    const [tasks,setTasks] = useState([]);
+
 
     const handleDescription = (e) => {
         setDescription(e.target.value);
@@ -76,6 +79,17 @@ function Tasks(){
         });
 
     }
+
+    useEffect(() => {
+        getAllTasks(location.state?.projectid)
+        .then((result) => {
+            console.log(result);
+            setTasks(result.data);
+        })
+        .catch((err) => {
+            console.log(err.message);
+        });
+    },[])
 
 
     return(
@@ -180,10 +194,22 @@ function Tasks(){
                     </div>
                     </div>
                 }
-                <div className="h-[70vh] w-[95%] md:w-[60%] border-[0.1em] border-cyan-300 rounded-lg mx-auto my-[1em]">
+                <div className="h-[90vh] w-[95%] md:w-[60%] border-[0.1em] border-cyan-300 rounded-lg mx-auto my-[1em] overflow-auto">
                     <h1 className="text-white text-center p-[0.5em] m-[0.5em]">
                         Tasks
                     </h1>
+                    {
+                        tasks.length > 0 &&
+                        tasks.map((task) => {
+                            return(
+                                <TaskCard
+                                key={task._id}
+                                task={task}
+                                />
+                            )
+                        }
+                    )
+                    }
                 </div>
             </div>
         </div>

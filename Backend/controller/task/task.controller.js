@@ -114,15 +114,28 @@ const updateTask = asyncHandler(
         // update the task document
         // save the document 
         // return res
+
         const {taskid} = req.params;
 
         if(!taskid || !isValidObjectId(taskid)){
             throw new ApiError(400,"Invalid task id");
         }
+
+        
+        const userid = req.user._id;
+
+        if(!userid || !isValidObjectId(userid)){
+            throw new ApiError(400,"Invalid user id");
+        }
+
         const task = await Task.findOne({_id:taskid});
 
         if(!task){
             throw new ApiError(404,"Task not found");
+        }
+
+        if(task.created_by.toString() != userid.toString()){
+            throw new ApiError(403,"You are not authorized to perform this action");
         }
 
         const {description,deadline,priority,platformlink} = req.body;
@@ -211,7 +224,7 @@ const allTasks = asyncHandler(
 
         const tasks = await Task.find({projectid:projectid});
 
-        if(task.length === 0){
+        if(tasks.length === 0){
             throw new ApiError(404,"No tasks found");
         
         }
@@ -241,6 +254,12 @@ const updateToReview = asyncHandler(
 
         const {taskid} = req.params;
 
+        const userid = req.user._id;
+
+        if(!userid || !isValidObjectId(userid)){
+            throw new ApiError(400,"Invalid user id");
+        }
+
         if(!taskid || !isValidObjectId(taskid)){
             throw new ApiError(400,"Invalid task id");
         }
@@ -249,6 +268,10 @@ const updateToReview = asyncHandler(
 
         if(!task){
             throw new ApiError(404,"Task not found");
+        }
+
+        if(task.assigned_to.toString() != userid.toString()){
+            throw new ApiError(403,"You are not authorized to perform this action");
         }
 
         if(task.status != "pending" && task.status != "updated"){
@@ -283,6 +306,12 @@ const updateToCompleted = asyncHandler(
         // return res
 
         const {taskid} = req.params;
+        const userid = req.user._id;
+
+        if(!userid || !isValidObjectId(userid)){
+            throw new ApiError(400,"Invalid user id");
+        }
+        
 
         if(!taskid || !isValidObjectId(taskid)){
             throw new ApiError(400,"Invalid task id");
@@ -292,6 +321,10 @@ const updateToCompleted = asyncHandler(
 
         if(!task){
             throw new ApiError(404,"Task not found");
+        }
+
+        if(task.created_by.toString() != userid.toString()){
+            throw new ApiError(403,"You are not authorized to perform this action");
         }
 
         if(task.status != "review"){
@@ -330,10 +363,19 @@ const deleteTask = asyncHandler(
 
         }
 
+        const userid = req.user._id;
+        if(!userid || !isValidObjectId(userid)){
+            throw new ApiError(400,"Invalid user id");
+        }
+
         const task = await Task.findById(taskid);
 
         if(!task){
             throw new ApiError(404,"Task not found");
+        }
+
+        if(task.created_by.toString() != userid.toString()){
+            throw new ApiError(403,"You are not authorized to perform this action");
         }
 
         await task.deleteOne();
