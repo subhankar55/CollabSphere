@@ -2,12 +2,14 @@ express
 socket.io
 dotenv
 cookie-parser
+cookie
 cors
 mongoose
 mongoose-paginate-v2
 mongoose-aggregate-paginate-v2
 bcrypt
 jsonwebtoken
+bullmq
 
 
 

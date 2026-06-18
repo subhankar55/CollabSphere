@@ -7,6 +7,7 @@ import { isValidObjectId } from "mongoose";
 import WorkspaceUser from "../../models/workspaceUser.model.js";
 import Workspace from "../../models/workspace.model.js";
 import User from "../../models/user.model.js";
+import notificationQueue from "../notification/notification.queue.js";
 
 
 
@@ -88,6 +89,12 @@ const createTask = asyncHandler(
             priority:priority,
             platformlink:platformlink
         });
+
+        await notificationQueue.add('taskCreated',{
+            message:`You are assigned a new task by ${req.user.username}!`,
+            reciepent:assigned_to,
+            sender:userid
+        })
 
         return res
         .status(201)
