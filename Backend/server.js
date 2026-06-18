@@ -1,5 +1,6 @@
 import { Server } from "socket.io";
 import socketAuth from "./middlewares/socketAuth.middleware.js";
+import { registerNotificationEvents } from "./controller/notification/notification.controller.js";
 
 
 let io;
@@ -18,8 +19,12 @@ export function initSocket(server) {
     io.on("connection", (socket)=>{
         const userid = socket.user?._id?.toString();
 
-        socket.join(userid);
         console.log("User connected : ",socket.user?.username);
+
+        socket.join(userid);
+
+        registerNotificationEvents(socket);
+        
 
         socket.on("disconnect",() => {
             console.log("User disconnected : ",socket.user?.username);

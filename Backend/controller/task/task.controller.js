@@ -90,6 +90,23 @@ const createTask = asyncHandler(
             platformlink:platformlink
         });
 
+        const reminder = new Date(deadline).getTime() - 24*60*60*1000;
+        const delay = reminder - Date.now();
+
+        if(delay > 0){
+            await notificationQueue.add('taskReminder',
+            {
+                message:`Only 1 day left to complete a task assigned by ${req.user.username}!`,
+                reciepent:assigned_to,
+                sender:userid
+            },
+            {
+                jobId:`reminder-${task._id.toString()}`,
+                delay:delay
+            }
+        );
+    }
+
         await notificationQueue.add('taskCreated',{
             message:`You are assigned a new task by ${req.user.username}!`,
             reciepent:assigned_to,
@@ -156,8 +173,11 @@ const updateTask = asyncHandler(
             task.description = description;
         
         }
+        let delay = 0;
         if(deadline){
             task.deadline = deadline;
+            const reminder = new Date(deadline).getTime() - 24*60*60*1000;
+            delay = reminder - Date.now();
         }
         if(priority.trim()){
             task.priority = priority;
@@ -169,6 +189,28 @@ const updateTask = asyncHandler(
         task.status = "updated";
 
         await task.save();
+
+        if(delay > 0){
+            await notificationQueue.add(
+                `taskReminder`,
+                {
+                    message:`Only 1 day left to complete a task assigned by ${req.user.username}`,
+                    reciepent:task.assigned_to,
+                    sender:userid
+                },
+                {
+                    jobId:`reminder-${task._id.toString()}`,
+                    delay:delay
+                }
+            )
+        }
+
+
+        await notificationQueue.add('taskUpdated',{
+            message:`Your task has been updated by ${req.user.username}!`,
+            reciepent:task.assigned_to,
+            sender:userid
+        });
 
         return res
         .status(200)
@@ -386,6 +428,13 @@ const deleteTask = asyncHandler(
         }
 
         await task.deleteOne();
+             
+        await notificationQueue.add('taskDeleted',{
+            message:`Your task has been deleted by ${req.user.username}!`,
+            reciepent:task.assigned_to,
+            sender:userid
+        });
+        
 
         return res
         .status(200)
