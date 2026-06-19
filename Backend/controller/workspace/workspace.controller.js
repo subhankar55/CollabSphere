@@ -5,6 +5,7 @@ import User from "../../models/user.model.js";
 import Invitation from "../../models/workspaceInvitation.model.js";
 import Project from "../../models/projects.model.js";
 import Task from "../../models/tasks.model.js";
+import Chat from "../../models/chat.model.js";
 import ApiError from "../../utils/ApiError.utils.js";
 import ApiResponse from "../../utils/ApiResponse.utils.js";
 import { isValidObjectId } from "mongoose";
@@ -423,6 +424,10 @@ const deleteWorkspace = asyncHandler(
             });
 
             await Invitation.deleteMany({
+                workspaceid
+            });
+
+            await Chat.deleteMany({
                 workspaceid
             });
 
