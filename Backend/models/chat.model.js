@@ -16,7 +16,7 @@ const chatSchema = new mongoose.Schema({
     },
     workspaceid:{
         type: mongoose.Schema.Types.ObjectId,
-        ref:"workspce",
+        ref:"workspace",
         required:true
     },
     sent:{
