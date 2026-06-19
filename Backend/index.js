@@ -3,6 +3,7 @@ import app from "./app.js";
 import { initSocket } from "./server.js";
 import dotenv from "dotenv";
 import {connectDB} from "./db/index.js";
+import "./controller/notification/notification.worker.js"
 
 dotenv.config();
 

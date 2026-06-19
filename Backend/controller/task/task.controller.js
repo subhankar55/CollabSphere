@@ -107,11 +107,13 @@ const createTask = asyncHandler(
         );
     }
 
-        await notificationQueue.add('taskCreated',{
+        const job = await notificationQueue.add('taskCreated',{
             message:`You are assigned a new task by ${req.user.username}!`,
             reciepent:assigned_to,
             sender:userid
-        })
+        });
+
+        console.log("Job added : ", job?.id);
 
         return res
         .status(201)

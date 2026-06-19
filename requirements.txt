@@ -20,3 +20,4 @@ react-responsive
 react-router-dom
 axios
 react-icons
+socket.io-client

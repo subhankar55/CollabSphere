@@ -12,7 +12,7 @@ new Worker(
     'notification',
     
     async (job) => {
-        console.log("Processing the job");
+        console.log("Processing the job:",job.id);
 
         const notification = await Notification.create({
             message:job.data.message,

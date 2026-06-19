@@ -12,6 +12,7 @@ import Pricing from './pages/Pricing.jsx'
 import Message from './pages/Message.jsx'
 import Project from './pages/Projects.jsx'
 import Tasks from './pages/Tasks.jsx'
+import Notification from './pages/Notification.jsx'
 import { AuthProvider } from './context/authContext.js'
 import { authInfo } from './services/authData.js'
 
@@ -49,6 +50,7 @@ function App() {
         <Route path='/message' element={<Message/>} />
         <Route path='/projects' element={<Project/>} />
         <Route path='/tasks' element={<Tasks/>} />
+        <Route path='/notifications' element={<Notification/>} />
       </>
     )
   )

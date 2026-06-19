@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import { createTask, getAllTasks } from "../services/taskData.js";
 import { useNavigate } from "react-router-dom";
 import TaskCard from "../components/TaskCard.jsx";
+import { countUnread } from "../services/notificationData.js";
+import socket from "../services/socket.js";
 
 
 
@@ -22,6 +24,7 @@ function Tasks(){
     const [url,setUrl] = useState("");
     const [days,setDays] = useState(null);
     const [tasks,setTasks] = useState([]);
+    const [count,setCount] = useState(0);
 
 
     const handleDescription = (e) => {
@@ -89,8 +92,61 @@ function Tasks(){
         .catch((err) => {
             console.log(err.message);
         });
-    },[])
+    },[]);
 
+    useEffect(
+        () => {
+            countUnread()
+            .then((result) => {
+                console.log(result);
+                setCount(Number(result.data));
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+
+        },[]
+    );
+
+    useEffect(
+        () => {
+
+            const handleCount = () => {
+                setCount(prev => prev + 1);
+            }
+
+            socket.on("notification",handleCount);
+
+            return () => {
+                socket.off("notification",handleCount);
+            }
+
+        },[]
+    );
+
+    useEffect(
+        () => {
+
+            const handleCount = () => {
+                setCount(0);
+            }
+
+            socket.on("notificationsMarkedViewed",handleCount);
+
+            return () => {
+                socket.off("notificationsMarkedViewed",handleCount);
+            }
+
+        },[]
+    );
+
+    const enterNotification = (e) => {
+        e.preventDefault();
+
+        navigate("/notifications");
+    }
+
+    console.log("count:",count);
 
     return(
         <>
@@ -118,9 +174,16 @@ function Tasks(){
                         </form>
                     </div>
                 <button
-                className="bg-orange-500 px-[0.5em] rounded-md hover:cursor-pointer hover:text-black ml-[3em] my-[2em]"
+                onClick={enterNotification}
+                className="bg-yellow-500 px-[0.5em] rounded-md hover:cursor-pointer hover:text-black ml-[3em] my-[2em] relative"
                 >
                     Notification
+                    {
+                        count > 0 && 
+                        <span className="bg-red-600 text-white absolute top-0 right-[0.001em] flex items-center justify-center h-[3vh] w-[20%] rounded-full">
+                            {count}
+                        </span>
+                    }
                 </button>
 
                 <button
