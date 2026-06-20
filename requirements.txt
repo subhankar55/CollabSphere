@@ -10,6 +10,7 @@ mongoose-aggregate-paginate-v2
 bcrypt
 jsonwebtoken
 bullmq
+kafkajs
 
 
 

@@ -9,8 +9,7 @@ const chatSchema = new mongoose.Schema({
         required:true
     },
     sender:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:"user",
+        type: String,
         required:true
     
     },
@@ -35,14 +34,6 @@ const chatSchema = new mongoose.Schema({
             ref:"user"
         }
     ],
-    deliveredall:{
-        type:Boolean,
-        default:false
-    },
-    readall:{
-        type:Boolean,
-        default:false
-    }
 
 },{timestamps:true});
 
