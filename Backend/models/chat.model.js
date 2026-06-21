@@ -22,12 +22,6 @@ const chatSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
-    delivered_to:[
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref:"user"
-        }
-    ],
     readby:[
         {
             type: mongoose.Schema.Types.ObjectId,
