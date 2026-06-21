@@ -23,7 +23,7 @@ const createChat = asyncHandler(
             throw new ApiError(400,"Invalid workspace id!");
         }
 
-        if(!message.trim()){
+        if(!message || !message.trim()){
             throw new ApiError(400,"Message is needed!");
         }
         const userid = req.user._id;
@@ -50,13 +50,32 @@ const createChat = asyncHandler(
         .status(201)
         .json(
             new ApiResponse(201,null,"Chat created successfully!")
-        )
-
+        );
     }
 );
 
+const joinWorkspaceRoom = (socket) => {
+    socket.on(
+        'joinWorkspace', ({workspaceid}) => {
+
+            if(!workspaceid){
+                return socket.emit('workspaceJoinError',
+                    {
+                        message:"Workspace id is required!"
+                    }
+                );
+            }
+
+            socket.join(workspaceid.toString());
+
+            socket.emit("workspaceJoined",{workspaceid});
+        }
+    )
+};
+
 
 export {
-    createChat
+    createChat,
+    joinWorkspaceRoom
 };
 
