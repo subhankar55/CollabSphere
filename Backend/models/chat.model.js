@@ -24,8 +24,7 @@ const chatSchema = new mongoose.Schema({
     },
     readby:[
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref:"user"
+            type: String
         }
     ],
 

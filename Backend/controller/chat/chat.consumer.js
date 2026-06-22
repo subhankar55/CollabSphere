@@ -1,4 +1,6 @@
+import Chat from "../../models/chat.model.js";
 import kafka from "./chat.kafka.js";
+import { getIo } from "../../server.js";
 
 
 
@@ -11,15 +13,49 @@ const consumer = kafka.consumer(
 await consumer.connect();
 
 await consumer.subscribe({
-    topic:"chat-message"
+    topics:["chat-message","chat-read"]
 });
 
 await consumer.run({
-    eachMessage: async ({message}) => {
-        const data = JSON.parse(
-            message.value.toString()
-        );
-        console.log(data);
+    eachMessage: async ({topic,message}) => {
+        try {
+            const data = JSON.parse(
+                message.value.toString()
+            );
+            if(topic == 'chat-message'){
+
+                const chat = await Chat.create({
+                    message:data.message,
+                    sender:data.sender,
+                    workspaceid:data.workspaceid                    
+                });
+
+                const io = getIo();
+
+                io.to(data.workspaceid.toString()).emit("newChat",chat);
+
+            }
+            else if(topic == 'chat-read'){
+
+                await Chat.updateMany({
+                    workspaceid:data.workspaceid,
+                    sender:{$ne: data.username},
+                    readby:{$nin: [data.username]}
+                },
+                {
+                    $addToSet:{
+                        readby: data.username
+                    }
+                }
+                )
+
+                io.to(data.workspaceid.toString()).emit("chatRead");
+
+            }
+        } catch (error) {
+            throw new Error(error.message);
+        }
+        
     }
 });
 

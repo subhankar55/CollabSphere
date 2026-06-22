@@ -26,8 +26,8 @@ const createChat = asyncHandler(
         if(!message || !message.trim()){
             throw new ApiError(400,"Message is needed!");
         }
-        const userid = req.user._id;
-        if(!userid || !isValidObjectId(userid)){
+        const username = req.user.username;
+        if(!username || !username.trim()){
             throw new ApiError(404,"Invalid User!");
         }
 
@@ -38,7 +38,7 @@ const createChat = asyncHandler(
                     value: JSON.stringify(
                         {
                             message:message,
-                            sender:userid,
+                            sender:username,
                             workspaceid:workspaceid
                         }
                     )
@@ -53,6 +53,32 @@ const createChat = asyncHandler(
         );
     }
 );
+
+const getAllChats = asyncHandler(
+    async (req,res) => {
+        // get all chats of an workspace
+        // get the workspaceid from params
+        // search db for chats connected to that workspace id
+        // return chats
+
+        const {workspaceid} = req.params;
+        if(!workspaceid || isValidObjectId(workspaceid)){
+            throw new ApiError(404,"Invalid workspace id");
+        }
+
+        const chats = await Chat.find({workspaceid});
+        if(chats.length == 0){
+            throw new ApiError(404,"No chats found");
+        }
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(200,chats,"Chats fetched successfully!")
+        );
+    }
+)
+
+
 
 const joinWorkspaceRoom = (socket) => {
     socket.on(
@@ -73,9 +99,31 @@ const joinWorkspaceRoom = (socket) => {
     )
 };
 
+const markAsRead = (socket) => {
+    socket.on(
+        "markRead", async ({workspaceid}) => {
+            await producer.send({
+                topic:'chat-read',
+                messages:[
+                    {
+                        value: JSON.stringify(
+                            {
+                                workspaceid:workspaceid,
+                                username:socket.user?.username
+                            }
+                        )
+                    }
+                ]
+            })
+        }
+    );
+}
+
 
 export {
     createChat,
-    joinWorkspaceRoom
+    getAllChats,
+    joinWorkspaceRoom,
+    markAsRead
 };
 
