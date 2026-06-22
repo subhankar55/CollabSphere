@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import TaskCard from "../components/TaskCard.jsx";
 import { countUnread } from "../services/notificationData.js";
 import socket from "../services/socket.js";
+import {chatWithGemini} from "../services/geminiData.js"
+import { IoSend } from "react-icons/io5";
 
 
 
@@ -25,6 +27,8 @@ function Tasks(){
     const [days,setDays] = useState(null);
     const [tasks,setTasks] = useState([]);
     const [count,setCount] = useState(0);
+    const [aimessage,setAimessage] = useState("");
+    const [message,setMessage] = useState("");
 
 
     const handleDescription = (e) => {
@@ -148,6 +152,28 @@ function Tasks(){
 
     console.log("count:",count);
 
+    const askGemini = (e) => {
+        console.log("gemini 1")
+        e.preventDefault();
+        chatWithGemini(message)
+        .then((result) => {
+            console.log("Gemini Api called")
+            setAimessage(result);
+            setMessage("");
+        })
+        .catch((err) => {
+            setMessage("");
+            console.log(err);
+            navigate("/message",{
+                state:{
+                    message: "Something went wrong inside Gemini!"
+                }
+            })
+        });
+    }
+
+
+
     return(
         <>
         <div className="bg-black min-h-screen w-full">
@@ -155,23 +181,42 @@ function Tasks(){
                 <h1 className="text-cyan-300 text-center text-lg">
                     Project : {location.state?.projectname}
                 </h1>
-                <div className="bg-gray-200 w-[80%] md:w-[35%] mx-auto my-[1em] p-[0.1em] rounded-lg overflow-auto">
+                <div className="bg-gray-200 w-[90%] md:w-[70%] mx-auto my-[1em] p-[0.1em] rounded-lg overflow-auto">
+                        {
+                            aimessage.trim() && 
+                            <div className="w-full">
+                                {aimessage}
+                            </div>
+                        }
                         <form 
                         action="" 
-                        method="post"
-                        className="m-[0.5em] flex flex-col md:flex-row items-center justify-center gap-[1em]"
+                        onSubmit={askGemini}
+                        className="m-[0.5em] flex flex-col md:flex-row items-center justify-center gap-[0.5em]"
                         >
                             <input type="text"
                             placeholder="Ask gemini"
-                            className="bg-white p-[0.1em] w-[95%] md:w-[60%]"
+                            value={message}
+                            onChange={(e) => {setMessage(e.target.value)}}
+                            className="bg-white p-[0.5em] w-[95%] md:w-[60%] rounded-4xl"
                             />
                             <button 
                             type="submit"
-                            className="bg-green-500 text-white rounded-md px-[0.5em] hover:cursor-pointer"
+                            className="rounded-md p-[0.3em] hover:cursor-pointer"
                             >
-                                Send
+                               <IoSend className="text-green-500" 
+                               size={30}
+                               />
                             </button>
                         </form>
+                        {
+                            aimessage.trim() &&
+                            <button
+                            onClick={() => {setAimessage("");}}
+                            className="bg-orange-500 text-white rounded-md px-[0.5em] hover:cursor-pointer block mx-auto"
+                            >
+                                clear
+                            </button>
+                        }
                     </div>
                 <button
                 onClick={enterNotification}

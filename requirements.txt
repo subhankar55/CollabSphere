@@ -22,3 +22,4 @@ react-router-dom
 axios
 react-icons
 socket.io-client
+@google/generative-ai
