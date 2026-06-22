@@ -8,7 +8,7 @@ import { createChat, getAllChats,
 const router = Router();
 
 
-router.route("/createChat").post(verifyJWT,createChat);
+router.route("/createChat/:workspaceid").post(verifyJWT,createChat);
 router.route("/allChats/:workspaceid").get(getAllChats);
 
 

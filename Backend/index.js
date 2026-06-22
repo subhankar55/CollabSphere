@@ -4,6 +4,8 @@ import { initSocket } from "./server.js";
 import dotenv from "dotenv";
 import {connectDB} from "./db/index.js";
 import "./controller/notification/notification.worker.js"
+import "./controller/chat/chat.consumer.js"
+import { createTopics } from "./controller/chat/kafka.topic.js";
 
 dotenv.config();
 
@@ -17,6 +19,7 @@ const port = process.env.PORT || 3000;
 async function startServer(){
     try{
         await connectDB();
+        await createTopics();
         server.listen(port,()=>{
             console.log(`Server is running on port ${port}`);
         })

@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
 import socketAuth from "./middlewares/socketAuth.middleware.js";
 import { registerNotificationEvents } from "./controller/notification/notification.controller.js";
-import { joinWorkspaceRoom, markAsRead } from "./controller/chat/chat.controller.js";
+import { joinWorkspaceRoom, markAsRead, type } from "./controller/chat/chat.controller.js";
 
 
 let io;
@@ -27,6 +27,7 @@ export function initSocket(server) {
         registerNotificationEvents(socket);
         joinWorkspaceRoom(socket);
         markAsRead(socket);
+        type(socket);
         
 
         socket.on("disconnect",() => {

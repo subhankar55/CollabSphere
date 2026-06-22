@@ -6,6 +6,7 @@ import { allMembers, allProjects,
     } from "../services/workspaceData";
 import ProjectCard from "../components/ProjectCard";
 import MemberCard from "../components/MemberCard";
+import Chat from "./Chat";
 
 
 function Project(){
@@ -164,6 +165,10 @@ function Project(){
                             <h1 className="text-white text-center">
                                 Chat
                             </h1>
+                            <Chat
+                            workspaceid={location.state?.workspaceid}
+                            members={members.length}
+                            />
                         </div>
                     </div>
                     <div className="bg-gray-200 w-[80%] md:w-[35%] mx-auto mt-[1em] p-[0.1em] rounded-lg overflow-auto">

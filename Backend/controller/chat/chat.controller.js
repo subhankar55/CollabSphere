@@ -120,10 +120,27 @@ const markAsRead = (socket) => {
 }
 
 
+const type = (socket) => {
+    socket.on(
+        "typing", ({workspaceid}) => {
+            if(!workspaceid){
+                return socket.emit('workspaceJoinError',
+                    {
+                        message:"Workspace id is required!"
+                    }
+                );
+            }
+            socket.to(workspaceid.toString()).emit("userTyping",{username:socket.user.username});
+        }
+    )
+}
+
+
 export {
     createChat,
     getAllChats,
     joinWorkspaceRoom,
-    markAsRead
+    markAsRead,
+    type
 };
 
