@@ -7,7 +7,7 @@ function ChatCard({chat,members}){
 
     return(
         <>
-            <div>
+            <div className="bg-gray-800 w-[95%] mx-auto my-[0.5em] rounded-md p-[0.5em]">
                 <h1 className="text-white">
                     {new Date(chat.createdAt).toLocaleString("en-IN",
                     {

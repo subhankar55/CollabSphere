@@ -6,7 +6,7 @@ import { allMembers, allProjects,
     } from "../services/workspaceData";
 import ProjectCard from "../components/ProjectCard";
 import MemberCard from "../components/MemberCard";
-import Chat from "./Chat";
+import Chat from "./Chat.jsx";
 
 
 function Project(){

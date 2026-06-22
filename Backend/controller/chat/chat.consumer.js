@@ -4,7 +4,8 @@ import { getIo } from "../../server.js";
 
 
 
-const consumer = kafka.consumer(
+export const kafkaConsumer = async () =>    {
+    const consumer = kafka.consumer(
     {
         groupId: "chat-workers"
     }
@@ -18,6 +19,7 @@ await consumer.subscribe({
 
 await consumer.run({
     eachMessage: async ({topic,message}) => {
+        const io = getIo();
         try {
             const data = JSON.parse(
                 message.value.toString()
@@ -30,7 +32,6 @@ await consumer.run({
                     workspaceid:data.workspaceid                    
                 });
 
-                const io = getIo();
 
                 io.to(data.workspaceid.toString()).emit("newChat",chat);
 
@@ -53,9 +54,10 @@ await consumer.run({
 
             }
         } catch (error) {
-            throw new Error(error.message);
+            console.log(error.message);
         }
         
     }
 });
+};
 

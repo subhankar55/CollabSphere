@@ -62,7 +62,7 @@ const getAllChats = asyncHandler(
         // return chats
 
         const {workspaceid} = req.params;
-        if(!workspaceid || isValidObjectId(workspaceid)){
+        if(!workspaceid || !isValidObjectId(workspaceid)){
             throw new ApiError(404,"Invalid workspace id");
         }
 
@@ -115,6 +115,7 @@ const markAsRead = (socket) => {
                     }
                 ]
             })
+            console.log("mark as read added to kafka");
         }
     );
 }

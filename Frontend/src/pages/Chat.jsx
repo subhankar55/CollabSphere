@@ -15,12 +15,14 @@ function Chat({workspaceid,members}){
     const navigate = useNavigate();
     const [typer,setTyper] = useState("");
 
-
+    console.log("workspaceid:",workspaceid);
+    console.log("type",typeof workspaceid);
 
     useEffect(() => {
+        console.log("all chats: ",workspaceid);
         allChats(workspaceid)
         .then((result) => {
-            console.log(result);
+            console.log("allChats called");
             setChats(result.data);
         })
         .catch((err) => {
@@ -31,6 +33,8 @@ function Chat({workspaceid,members}){
     useEffect(() => {
         const chathandler = (data) => {
             setChats((prev) => [...prev,data]);
+
+            socket.emit("markRead",{workspaceid});
         }
 
         socket.on("newChat",chathandler);
@@ -52,8 +56,10 @@ function Chat({workspaceid,members}){
         createChat(workspaceid,message)
         .then((result) => {
             console.log(result);
+            setMessage("");
         })
         .catch((err) => {
+            setMessage("");
             navigate("/message",
                 {
                     state:{
@@ -82,6 +88,30 @@ function Chat({workspaceid,members}){
             clearTimeout(timeout);
             socket.off("userTyping",handleTyping);
         }
+    },[]);
+
+    useEffect(() => {
+        if(!workspaceid){
+            return;
+        }
+        socket.emit('markRead',{workspaceid});
+    },[])
+
+    useEffect(() => {
+        const handleRead = () => {
+            allChats(workspaceid)
+            .then((result) => {
+                setChats(result.data);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            })
+        }
+
+        socket.on("chatRead",handleRead);
+        return () => {
+            socket.off("chatRead",handleRead);
+        }
     },[])
 
     useEffect(() => {
@@ -93,7 +123,7 @@ function Chat({workspaceid,members}){
     return(
         <>
             <div className="flex flex-col gap-[0.5em] h-full w-full">
-                <div>
+                <div className="sticky top-[0.3em] bg-black">
                     {
                         typer.trim() &&
                         <h1>
@@ -119,7 +149,7 @@ function Chat({workspaceid,members}){
                 
                 
 
-                <div className="w-[95%] bottom-[0.3em] bg-gray-600 rounded-4xl p-[0.5em] mx-auto">
+                <div className="w-[95%] sticky bottom-[0.3em] bg-gray-600 rounded-4xl p-[0.5em] mx-auto">
                     <form 
                     action="" 
                     method="post"
