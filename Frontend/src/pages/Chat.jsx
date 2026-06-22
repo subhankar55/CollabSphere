@@ -5,6 +5,7 @@ import { allChats, createChat } from "../services/chatData.js";
 import socket from "../services/socket.js";
 import { useNavigate } from "react-router-dom";
 import ChatCard from "../components/ChatCard.jsx"
+import { IoSend } from "react-icons/io5";
 
 
 
@@ -167,7 +168,10 @@ function Chat({workspaceid,members}){
                         type="submit"
                         className="hover:cursor-pointer hover:text-cyan-500"
                         >
-                            Send
+                            <IoSend
+                            className="text-gray-900"
+                            size={20}
+                            />
                         </button>
                     </form>
                 </div>
