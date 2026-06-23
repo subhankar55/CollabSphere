@@ -81,7 +81,7 @@ const activeProjects = asyncHandler(
         return res
         .status(200)
         .json(
-            new ApiResponse(200,result,"Number of active projects fetched successfully!")
+            new ApiResponse(200,result[0].totalprojects,"Number of active projects fetched successfully!")
         );
     }
 );
@@ -158,11 +158,11 @@ const completedTasks = asyncHandler(
             assigned_to:userid,
             status:"completed"
         });
-
+        const ans = tasks?.length || 0;
         return res
         .status(200)
         .json(
-            new ApiResponse(200,tasks.length,"Number of completed tasks fetched successfully!")
+            new ApiResponse(200,ans,"Number of completed tasks fetched successfully!")
         );
     }
 )

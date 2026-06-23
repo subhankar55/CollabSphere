@@ -13,6 +13,7 @@ import Message from './pages/Message.jsx'
 import Project from './pages/Projects.jsx'
 import Tasks from './pages/Tasks.jsx'
 import Notification from './pages/Notification.jsx'
+import Dashboard from './pages/Dashboard.jsx'
 import { AuthProvider } from './context/authContext.js'
 import { authInfo } from './services/authData.js'
 
@@ -51,6 +52,7 @@ function App() {
         <Route path='/projects' element={<Project/>} />
         <Route path='/tasks' element={<Tasks/>} />
         <Route path='/notifications' element={<Notification/>} />
+        <Route path='dashboard' element={<Dashboard/>} />
       </>
     )
   )

@@ -4,8 +4,9 @@ import cookieParser from "cookie-parser";
 import authRouter from "../Backend/routes/auth.routes.js";
 import workspaceRouter from "../Backend/routes/workspace.routes.js";
 import taskRouter from "../Backend/routes/task.routes.js";
-import notificationRouter from "../Backend/routes/notification.routes.js"
-import chatRouter from "../Backend/routes/chat.routes.js"
+import notificationRouter from "../Backend/routes/notification.routes.js";
+import chatRouter from "../Backend/routes/chat.routes.js";
+import dashboardRouter from "../Backend/routes/dashboard.routes.js"
 
 
 
@@ -31,6 +32,7 @@ app.use("/collabsphere/api/v1/workspace",workspaceRouter);
 app.use("/collabsphere/api/v1/task",taskRouter);
 app.use("/collabsphere/api/v1/notification",notificationRouter);
 app.use("/collabsphere/api/v1/chat",chatRouter);
+app.use("/collabsphere/api/v1/dashboard",dashboardRouter);
 
 
 

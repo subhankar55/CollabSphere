@@ -51,6 +51,12 @@ function Header(){
         });
     }
 
+    const dashboard = (e) => {
+        e.preventDefault();
+
+        navigate("/dashboard");
+    }
+
     console.log(username);
     console.log(typeof username);
 
@@ -145,6 +151,12 @@ function Header(){
                                                 className="text-red-600 block mx-auto hover:cursor-pointer"
                                             >
                                                 Delete
+                                            </button>
+                                            <button
+                                            onClick={dashboard}
+                                            className="text-orange-500 block mx-auto hover:cursor-pointer"
+                                            >
+                                                Dashboard
                                             </button>
                                         </div>
                                     )
