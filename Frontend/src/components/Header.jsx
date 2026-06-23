@@ -134,7 +134,7 @@ function Header(){
                                 </button>
                                 {
                                     open && (
-                                        <div className="absolute top-[2em] right-0 md:top-auto md:right-0 rounded-md h-[18vh] md:h-[18vh] w-[25%] md:w-[15%] bg-gray-700 border-[0.05em] border-white z-50 p-[0.5em] shadow-white shadow-md">
+                                        <div className="absolute top-[2em] right-0 md:top-auto md:right-0 rounded-md h-[20vh] md:h-[20vh] w-[38%] md:w-[15%] bg-gray-700 border-[0.05em] border-white z-50 p-[0.5em] shadow-white shadow-md">
                                             <div className="m-[0.05em]">
                                                 <p className="text-white text-center">
                                                     {username}
