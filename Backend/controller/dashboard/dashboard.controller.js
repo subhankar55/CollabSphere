@@ -5,7 +5,7 @@ import User from "../../models/user.model.js";
 import WorkspaceUser from "../../models/workspaceUser.model.js";
 import Task from "../../models/tasks.model.js";
 import Project from "../../models/projects.model.js";
-import { isValidObjectId } from "mongoose";
+import mongoose, { isValidObjectId } from "mongoose";
 
 
 const numberOfWorkspaces = asyncHandler(
@@ -37,6 +37,52 @@ const numberOfWorkspaces = asyncHandler(
 const activeProjects = asyncHandler(
     async (req,res) => {
         // get the number of active projects
+        // get the userid
+        // validate the data
+        // get the all workspace id connected to this project
+        // get the all projects count connected to each workspaceid
+        // return the number
+
+        const userid = req.user._id;
+        if(!userid || !isValidObjectId(userid)){
+            throw new ApiError(401,"Invalid user!");
+        }
+        const result = await WorkspaceUser.aggregate([
+            {
+                $match: {
+                    userid: new mongoose.Types.ObjectId(userid)
+                }
+            },
+            {
+                $lookup:{
+                    from:"projects",
+                    localField:"workspaceid",
+                    foreignField:"workspaceid",
+                    as:"projects"
+                }
+            },
+            {
+                $project:{
+                    projectCount:{
+                        $size:"$projects"
+                    }
+                }
+            },
+            {
+                $group:{
+                    _id:null,
+                    totalprojects:{
+                        $sum:"$projectCount"
+                    }
+                }
+            }
+        ]);
+
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(200,result,"Number of active projects fetched successfully!")
+        );
     }
 );
 
@@ -72,12 +118,52 @@ const createdWorkspaces = asyncHandler(
 const activeTasks = asyncHandler(
     async (req,res) => {
         // get the number of active tasks
+        // get the user id
+        // validate the info
+        // search the tasks assigned to this userid and which are not completed
+        // return res
+        const userid = req.user._id;
+        if(!userid || !isValidObjectId(userid)){
+            throw new ApiError(401,"Invalid user!");
+        }
+
+        const tasks = await Task.find({
+            assigned_to:userid,
+            status:{
+                $in:["pending","updated","review"]
+            }
+        });
+
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(200,tasks.length,"Number of active tasks fetched successfully!")
+        );
     }
 );
 
 const completedTasks = asyncHandler(
     async (req,res) => {
         // get the number of completed tasks
+        // get the user id
+        // validate the info
+        // search the tasks assigned to this userid and which are completed
+        // return res
+        const userid = req.user._id;
+        if(!userid || !isValidObjectId(userid)){
+            throw new ApiError(401,"Invalid user!");
+        }
+
+        const tasks = await Task.find({
+            assigned_to:userid,
+            status:"completed"
+        });
+
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(200,tasks.length,"Number of completed tasks fetched successfully!")
+        );
     }
 )
 
