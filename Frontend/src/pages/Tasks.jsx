@@ -172,7 +172,7 @@ function Tasks(){
         });
     }
 
-
+    console.log("gemini Api:",import.meta.env.VITE_GEMINI_API_KEY);
 
     return(
         <>
