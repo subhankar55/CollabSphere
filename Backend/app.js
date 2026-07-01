@@ -1,12 +1,12 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import authRouter from "../Backend/routes/auth.routes.js";
-import workspaceRouter from "../Backend/routes/workspace.routes.js";
-import taskRouter from "../Backend/routes/task.routes.js";
-import notificationRouter from "../Backend/routes/notification.routes.js";
-import chatRouter from "../Backend/routes/chat.routes.js";
-import dashboardRouter from "../Backend/routes/dashboard.routes.js"
+import authRouter from "./routes/auth.routes.js";
+import workspaceRouter from "./routes/workspace.routes.js";
+import taskRouter from "./routes/task.routes.js";
+import notificationRouter from "./routes/notification.routes.js";
+import chatRouter from "./routes/chat.routes.js";
+import dashboardRouter from "./routes/dashboard.routes.js"
 
 
 
