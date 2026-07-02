@@ -7,6 +7,9 @@ import taskRouter from "./routes/task.routes.js";
 import notificationRouter from "./routes/notification.routes.js";
 import chatRouter from "./routes/chat.routes.js";
 import dashboardRouter from "./routes/dashboard.routes.js"
+import dotenv from "dotenv"
+
+dotenv.config();
 
 
 
@@ -14,7 +17,10 @@ import dashboardRouter from "./routes/dashboard.routes.js"
 const app = express();
 
 app.use(cors({
-    origin:"http://localhost:5173",
+    origin:[
+        "http://localhost:5173",
+        process.env.FRONTEND_URL
+    ],
     credentials:true
 }));
 
