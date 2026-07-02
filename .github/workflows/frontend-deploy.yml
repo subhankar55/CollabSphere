@@ -1,0 +1,66 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "Frontend/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy Frontend
+        uses: appleboy/ssh-action@v1.2.0
+
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+
+          script: |
+            set -e
+
+            echo "===== Updating Frontend ====="
+
+            cd /home/ubuntu/frontend
+
+            # Fetch latest changes
+            git fetch origin main
+
+            # Enable sparse checkout
+            git sparse-checkout init --cone
+
+            # Checkout only Frontend directory
+            git sparse-checkout set Frontend
+
+            # Reset to latest main
+            git reset --hard origin/main
+
+            cd Frontend
+
+            echo "===== Creating .env ====="
+
+            cat > .env <<EOF
+            VITE_SERVER=${{ secrets.VITE_SERVER }}
+            VITE_GEMINI_API_KEY=${{ secrets.VITE_GEMINI_API_KEY }}
+            EOF
+
+            echo "===== Installing Dependencies ====="
+
+            npm ci
+
+            echo "===== Building ====="
+
+            npm run build
+
+            echo "===== Deploying ====="
+
+            sudo rm -rf /var/www/collabsphere/*
+            sudo cp -r dist/* /var/www/collabsphere/
+
+            sudo systemctl reload nginx
+
+            echo "===== Frontend Deployment Successful ====="
