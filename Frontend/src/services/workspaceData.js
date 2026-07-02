@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const createWorkspace = async function (name){
     try {
-        const res = await axios.post(`http://localhost:3000/collabsphere/api/v1/workspace/create`,
+        const res = await axios.post(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/workspace/create`,
             {
                 name
             },
@@ -20,7 +20,7 @@ export const createWorkspace = async function (name){
 export const getAllworkspaces = async function(){
 
     try {
-        const res = await axios.get(`http://localhost:3000/collabsphere/api/v1/workspace/allworkspaces`,
+        const res = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/workspace/allworkspaces`,
             {
                 withCredentials:true
             }
@@ -35,7 +35,7 @@ export const getAllworkspaces = async function(){
 
 export const getWorkspaceByname = async function(name){
     try{
-        const res = await axios.post(`http://localhost:3000/collabsphere/api/v1/workspace/getWorkspace`,
+        const res = await axios.post(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/workspace/getWorkspace`,
             {
                 name
             },
@@ -53,7 +53,7 @@ export const getWorkspaceByname = async function(name){
 
 export const createProject = async function(workspaceid,name) {
     try {
-        const res = await axios.post(`http://localhost:3000/collabsphere/api/v1/workspace/${workspaceid}/project/create`,
+        const res = await axios.post(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/workspace/${workspaceid}/project/create`,
             {
                 name
             },
@@ -72,7 +72,7 @@ export const createProject = async function(workspaceid,name) {
 
 export const deleteProject = async function(workspaceid,projectid){
     try {
-        const res = await axios.delete(`http://localhost:3000/collabsphere/api/v1/workspace/${workspaceid}/project/${projectid}/delete`,
+        const res = await axios.delete(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/workspace/${workspaceid}/project/${projectid}/delete`,
             {
                 withCredentials:true
             }
@@ -86,7 +86,7 @@ export const deleteProject = async function(workspaceid,projectid){
 
 export const allProjects = async function(workspaceid){
     try {
-        const res = await axios.get(`http://localhost:3000/collabsphere/api/v1/workspace/${workspaceid}/projects`,
+        const res = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/workspace/${workspaceid}/projects`,
             {
                 withCredentials:true
             }
@@ -101,7 +101,7 @@ export const allProjects = async function(workspaceid){
 
 export const inviteUser = async function(workspaceid,username){
     try{
-        const res = await axios.post(`http://localhost:3000/collabsphere/api/v1/workspace/${workspaceid}/invite`,{
+        const res = await axios.post(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/workspace/${workspaceid}/invite`,{
             username
         },
         {
@@ -116,7 +116,7 @@ export const inviteUser = async function(workspaceid,username){
 
 export const allInvitations = async function(){
     try{
-        const res = await axios.get(`http://localhost:3000/collabsphere/api/v1/workspace/invitations`,{
+        const res = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/workspace/invitations`,{
             withCredentials:true
         
         }
@@ -132,7 +132,7 @@ export const allInvitations = async function(){
 
 export const allMembers = async function(workspaceid) {
     try {
-        const res = await axios.get(`http://localhost:3000/collabsphere/api/v1/workspace/${workspaceid}/users`,
+        const res = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/workspace/${workspaceid}/users`,
             {
                 withCredentials:true
             }
@@ -150,7 +150,7 @@ export const workspaceById = async function(workspaceid){
 
     try {
         
-        const res = await axios.get(`http://localhost:3000/collabsphere/api/v1/workspace/${workspaceid}`,{
+        const res = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/workspace/${workspaceid}`,{
             withCredentials:true
         });
         return res.data;
@@ -164,7 +164,7 @@ export const workspaceById = async function(workspaceid){
 export const joinWorkspace = async function(invitationid,workspaceid){
     try{
 
-        await axios.patch(`http://localhost:3000/collabsphere/api/v1/workspace/invitation/accept/${invitationid}`,
+        await axios.patch(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/workspace/invitation/accept/${invitationid}`,
             {},
             {
                 withCredentials:true
@@ -172,7 +172,7 @@ export const joinWorkspace = async function(invitationid,workspaceid){
             }
         );
 
-        const res = await axios.get(`http://localhost:3000/collabsphere/api/v1/workspace/join/${workspaceid}`,
+        const res = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/workspace/join/${workspaceid}`,
             {
                 withCredentials:true
             }
@@ -192,7 +192,7 @@ export const rejectInvitation = async function(invitationid){
 
     try {
 
-        const res = await axios.patch(`http://localhost:3000/collabsphere/api/v1/workspace/invitation/reject/${invitationid}`,
+        const res = await axios.patch(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/workspace/invitation/reject/${invitationid}`,
             {},
             {
                 withCredentials:true
@@ -213,7 +213,7 @@ export const rejectInvitation = async function(invitationid){
 export const deleteWorkspace = async function(workspaceid){
     try {
 
-        const res = await axios.delete(`http://localhost:3000/collabsphere/api/v1/workspace/${workspaceid}/delete`,
+        const res = await axios.delete(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/workspace/${workspaceid}/delete`,
             {
                 withCredentials:true
             }
@@ -231,7 +231,7 @@ export const deleteWorkspace = async function(workspaceid){
 
 export const upgradeUser = async function(workspaceid,userid){
     try{
-        const res = await axios.patch(`http://localhost:3000/collabsphere/api/v1/workspace/${workspaceid}/users/${userid}/upgrade`,
+        const res = await axios.patch(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/workspace/${workspaceid}/users/${userid}/upgrade`,
             {},
             {
                 withCredentials:true
@@ -246,7 +246,7 @@ export const upgradeUser = async function(workspaceid,userid){
 
 export const downgradeUser = async function(workspaceid,userid){
     try{
-        const res = await axios.patch(`http://localhost:3000/collabsphere/api/v1/workspace/${workspaceid}/users/${userid}/downgrade`,
+        const res = await axios.patch(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/workspace/${workspaceid}/users/${userid}/downgrade`,
             {},
             {
                 withCredentials:true

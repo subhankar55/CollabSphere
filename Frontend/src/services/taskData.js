@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const createTask = async function(description,username,deadline,priority,url,projectid){
     try{
-        const res = await axios.post(`http://localhost:3000/collabsphere/api/v1/task/createTask/${projectid}`,
+        const res = await axios.post(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/task/createTask/${projectid}`,
             {
                 description:description,
                 assignedTo:username,
@@ -26,7 +26,7 @@ export const createTask = async function(description,username,deadline,priority,
 
 export const getAllTasks = async function(projectid){
     try{
-        const res = await axios.get(`http://localhost:3000/collabsphere/api/v1/task/allTasks/${projectid}`,
+        const res = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/task/allTasks/${projectid}`,
             {
                 withCredentials:true
             }
@@ -45,7 +45,7 @@ export const getAllTasks = async function(projectid){
 
 export const updateTask = async function(description,deadline,priority,url,taskid){
     try{
-        const res = await axios.patch(`http://localhost:3000/collabsphere/api/v1/task/updateTask/${taskid}`,
+        const res = await axios.patch(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/task/updateTask/${taskid}`,
             {
                 description:description,
                 deadline:deadline,
@@ -67,7 +67,7 @@ export const updateTask = async function(description,deadline,priority,url,taski
 
 export const reviewTask = async function(taskid){
     try{
-        const res = await axios.patch(`http://localhost:3000/collabsphere/api/v1/task/updateToReview/${taskid}`,
+        const res = await axios.patch(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/task/updateToReview/${taskid}`,
             {},
             {
                 withCredentials:true
@@ -83,7 +83,7 @@ export const reviewTask = async function(taskid){
 
 export const doneTask = async function(taskid) {
     try {
-        const res = await axios.patch(`http://localhost:3000/collabsphere/api/v1/task/updateToCompleted/${taskid}`,
+        const res = await axios.patch(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/task/updateToCompleted/${taskid}`,
             {},
             {
                 withCredentials:true
@@ -100,7 +100,7 @@ export const doneTask = async function(taskid) {
 
 export const deleteTask = async function(taskid){
     try{
-        const res = await axios.delete(`http://localhost:3000/collabsphere/api/v1/task/deleteTask/${taskid}`,
+        const res = await axios.delete(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/task/deleteTask/${taskid}`,
             {
                 withCredentials:true
             }

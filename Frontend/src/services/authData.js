@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const authInfo = async function(){
     try{
-        const res = await axios.get(`http://localhost:3000/collabsphere/api/v1/auth/user`,
+        const res = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/auth/user`,
             {
                 withCredentials:true
             }
@@ -12,12 +12,12 @@ export const authInfo = async function(){
     }catch(err){
 
         if(err.response?.status === 401){
-            await axios.get(`http://localhost:3000/collabsphere/api/v1/auth/refresh`,
+            await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/auth/refresh`,
                 {
                     withCredentials:true
                 }
             );
-            const result = await axios.get(`http://localhost:3000/collabsphere/api/v1/auth/user`,
+            const result = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/auth/user`,
                 {
                     withCredentials:true
                 }
@@ -37,7 +37,7 @@ export const login = async function(username,password){
 
     try {
         const res = await axios.post(
-            `http://localhost:3000/collabsphere/api/v1/auth/login`,
+            `http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/auth/login`,
             {
             username,
             password
@@ -59,7 +59,7 @@ export const login = async function(username,password){
 export const register = async function(username,password){
     try {
         const res = await axios.post(
-            `http://localhost:3000/collabsphere/api/v1/auth/register`,
+            `http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/auth/register`,
             {
                 username,
                 password
@@ -79,7 +79,7 @@ export const register = async function(username,password){
 
 export const logout = async function(){
     try {
-        const res = await axios.get(`http://localhost:3000/collabsphere/api/v1/auth/logout`,{
+        const res = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/auth/logout`,{
             withCredentials:true     
         })
         return res.data.message;
@@ -91,7 +91,7 @@ export const logout = async function(){
 
 export const del = async function(){
     try {
-        const res = await axios.delete(`http://localhost:3000/collabsphere/api/v1/auth/delete`,{
+        const res = await axios.delete(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/auth/delete`,{
             withCredentials:true
         })
         return res.data.message;
@@ -103,7 +103,7 @@ export const del = async function(){
 
 export const duplicityCheck = async function(username){
     try {
-        const res = await axios.post(`http://localhost:3000/collabsphere/api/v1/auth/isduplicate`,{
+        const res = await axios.post(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/auth/isduplicate`,{
             username
         },
     {
@@ -118,7 +118,7 @@ export const duplicityCheck = async function(username){
 
 export const getUserById = async function(userid){
     try{
-        const res = await axios.get(`http://localhost:3000/collabsphere/api/v1/auth/userById/${userid}`,{
+        const res = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/auth/userById/${userid}`,{
             withCredentials:true
         });
         return res.data;

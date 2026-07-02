@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const createChat = async (workspaceid,message) => {
     try {
-        const res = await axios.post(`http://localhost:3000/collabsphere/api/v1/chat/createChat/${workspaceid}`,{
+        const res = await axios.post(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/chat/createChat/${workspaceid}`,{
             message:message
         },
         {
@@ -19,7 +19,7 @@ export const createChat = async (workspaceid,message) => {
 
 export const allChats = async (workspaceid) => {
     try {
-        const res = await axios.get(`http://localhost:3000/collabsphere/api/v1/chat/allChats/${workspaceid}`,
+        const res = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/chat/allChats/${workspaceid}`,
             {
                 withCredentials:true
             },

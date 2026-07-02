@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const workspaces = async() => {
     try {
-        const res = await axios.get("http://localhost:3000/collabsphere/api/v1/dashboard/workspaces",
+        const res = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/dashboard/workspaces`,
             {
                 withCredentials:true
             }
@@ -16,7 +16,7 @@ export const workspaces = async() => {
 
 export const createdWorkspaces = async () => {
     try {
-        const res = await axios.get("http://localhost:3000/collabsphere/api/v1/dashboard/createdWorkspaces",
+        const res = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/dashboard/createdWorkspaces`,
             {
                 withCredentials:true
             }
@@ -29,7 +29,7 @@ export const createdWorkspaces = async () => {
 
 export const projects = async () => {
     try {
-        const res = await axios.get("http://localhost:3000/collabsphere/api/v1/dashboard/projects",
+        const res = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/dashboard/projects`,
             {
                 withCredentials:true
             }
@@ -43,7 +43,7 @@ export const projects = async () => {
 
 export const tasks = async () => {
     try {
-        const res = await axios.get("http://localhost:3000/collabsphere/api/v1/dashboard/tasks",{
+        const res = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/dashboard/tasks`,{
             withCredentials:true
         });
         return res.data
@@ -54,7 +54,7 @@ export const tasks = async () => {
 
 export const completedTasks = async () => {
     try {
-        const res = await axios.get("http://localhost:3000/collabsphere/api/v1/dashboard/completedTasks",
+        const res = await axios.get(`http://${import.meta.env.VITE_SERVER}/collabsphere/api/v1/dashboard/completedTasks`,
             {
                 withCredentials:true
             }
